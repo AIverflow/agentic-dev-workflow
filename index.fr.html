@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le workflow de dev agentique : guide du débutant</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #2b2a27;
+    --muted: #6b675f;
+    --line: #e8e2d8;
+    --accent: #d97757;
+    --accent-soft: #fbeee8;
+    --you: #3b6fd4;
+    --you-soft: #e8effc;
+    --red: #d6453d;
+    --red-soft: #fde9e7;
+    --green: #2f9e5b;
+    --green-soft: #e4f5ea;
+    --code-bg: #f3efe8;
+    --bar: #efe9df;
+    --line-soft: #f2ede5;
+    --dot: #d8cfc2;
+    --arrow: #c9c1b4;
+    --term-dim: #a8a29a;
+    --tip-bg: #fff8e6;
+    --tip-line: #f1e2b8;
+    --accent-light: #e7a68c;
+    --accent-dark: #b8583a;
+    --on-dark: #ffffff;
+    --print-th: #eeeeee;
+    --print-ink: #000000;
+    --radius: 16px;
+    --shadow: 0 2px 10px rgba(60, 45, 30, .06);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 130px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+  h1 { font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: -.02em; }
+  h2 { font-size: 2rem; letter-spacing: -.01em; }
+  h3 { font-size: 1.15rem; }
+  p { margin: 0 0 1em; }
+  code, .cmd {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .9em;
+  }
+  code { background: var(--code-bg); padding: .1em .4em; border-radius: 6px; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  /* Language switch */
+  .lang-switch {
+    position: absolute; top: 18px; right: 24px; text-decoration: none; color: var(--ink);
+    background: var(--card); border: 1px solid var(--line); border-radius: 99px;
+    padding: 6px 14px; font-size: .9rem; font-weight: 600; box-shadow: var(--shadow);
+  }
+  .lang-switch:hover { border-color: var(--accent); }
+  @media print { .lang-switch { display: none; } }
+
+  /* Hero */
+  .hero { padding: 72px 0 40px; text-align: center; }
+  .hero .kicker {
+    display: inline-block; background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; padding: 4px 14px; border-radius: 99px; margin-bottom: 18px;
+  }
+  .hero p.lead { font-size: 1.25rem; color: var(--muted); max-width: 680px; margin: 0 auto; }
+  .hero .accent { color: var(--accent); }
+
+  /* ---------- Sticky flow map ---------- */
+  .map {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(250, 247, 242, .94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+  }
+  .map ol {
+    list-style: none; margin: 0 auto; padding: 0 16px; max-width: 1000px;
+    display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap;
+  }
+  .map li { display: flex; align-items: center; }
+  .map li + li::before { content: "→"; color: var(--arrow); margin: 0 2px; font-size: 1rem; }
+  .map a {
+    display: flex; flex-direction: column; align-items: center;
+    text-decoration: none; color: var(--ink);
+    padding: 6px 8px; border-radius: 12px; border: 2px solid transparent;
+    transition: background .2s, border-color .2s;
+    min-width: 76px;
+  }
+  .map a:hover { background: var(--card); }
+  .map a.active { background: var(--card); border-color: var(--accent); box-shadow: var(--shadow); }
+  .map .ico { font-size: 1.6rem; line-height: 1; }
+  .map .lbl { font-size: .8rem; font-weight: 600; margin-top: 4px; }
+  .map .side a { min-width: 0; color: var(--muted); }
+  .map .side .lbl { font-weight: 500; }
+
+  /* ---------- Sections ---------- */
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  .section-head { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+  .bubble {
+    flex: none; width: 72px; height: 72px; border-radius: 50%;
+    background: var(--accent-soft); display: grid; place-items: center; font-size: 2.2rem;
+  }
+  .step-num { color: var(--accent); font-weight: 700; font-size: .9rem; text-transform: uppercase; letter-spacing: .08em; }
+  .section-head h2 { margin: 0; }
+  .oneliner { font-size: 1.25rem; margin-bottom: 24px; }
+  .oneliner strong { color: var(--accent); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 24px; box-shadow: var(--shadow);
+  }
+  .grid { display: grid; gap: 18px; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card .big { font-size: 2rem; display: block; margin-bottom: 8px; }
+
+  .cmd-chip {
+    display: inline-block; background: var(--ink); color: var(--on-dark);
+    padding: 6px 14px; border-radius: 10px; font-weight: 600; margin-bottom: 18px;
+  }
+  .analogy {
+    border-left: 4px solid var(--accent); background: var(--accent-soft);
+    padding: 12px 18px; border-radius: 0 12px 12px 0; margin: 0 0 24px;
+  }
+
+  /* Roles */
+  .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .role { border-radius: 14px; padding: 14px 18px; }
+  .role.you { background: var(--you-soft); }
+  .role.claude { background: var(--accent-soft); }
+  .badge {
+    display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .05em;
+    text-transform: uppercase; padding: 2px 10px; border-radius: 99px; color: var(--on-dark); margin-bottom: 6px;
+  }
+  .badge.you { background: var(--you); }
+  .badge.claude { background: var(--accent); }
+  .role ul { margin: 0; padding-left: 20px; }
+
+  /* Example (chat mock) */
+  .example-label {
+    font-weight: 700; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin: 8px 0 10px;
+  }
+  .chat {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow); margin-bottom: 18px;
+  }
+  .chat-bar { background: var(--bar); padding: 8px 14px; font-size: .8rem; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .chat-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--dot); display: inline-block; }
+  .chat-bar span { margin-left: 8px; }
+  .msg { padding: 12px 18px; display: flex; gap: 12px; border-top: 1px solid var(--line-soft); }
+  .msg:first-of-type { border-top: 0; }
+  .who { flex: none; font-weight: 700; font-size: .8rem; width: 58px; padding-top: 3px; }
+  .msg.you .who { color: var(--you); }
+  .msg.claude .who { color: var(--accent); }
+  .msg.you .text { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .92rem; }
+  .msg .text p:last-child { margin: 0; }
+
+  .file {
+    background: var(--code-bg); border-radius: 12px; padding: 14px 18px;
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .85rem;
+    white-space: pre-wrap; margin-bottom: 18px; border: 1px solid var(--line);
+  }
+  .file .path { color: var(--accent); font-weight: 700; display: block; margin-bottom: 6px; }
+  .file .dim { color: var(--muted); }
+
+  .tip { display: flex; gap: 12px; align-items: flex-start; background: var(--tip-bg); border: 1px solid var(--tip-line); border-radius: 12px; padding: 12px 16px; }
+  .tip .t-ico { font-size: 1.3rem; }
+  .tip p { margin: 0; }
+
+  /* Tickets */
+  .tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .ticket { background: var(--card); border: 1px solid var(--line); border-top: 5px solid var(--accent); border-radius: 12px; padding: 14px 16px; }
+  .ticket .n { font-weight: 700; color: var(--accent); font-size: .85rem; }
+  .ticket .blk { font-size: .82rem; color: var(--muted); margin-top: 6px; }
+
+  .slices { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .slices { grid-template-columns: 1fr; } }
+  .slices .card h3 { margin-bottom: 10px; }
+  .cake { display: flex; gap: 6px; height: 120px; align-items: stretch; margin-bottom: 10px; }
+  .cake.layers { flex-direction: column; }
+  .cake div { flex: 1; border-radius: 6px; display: grid; place-items: center; font-size: .75rem; font-weight: 600; color: var(--on-dark); }
+  .cake.slicesv div { background: linear-gradient(var(--accent-light) 0 33%, var(--accent) 33% 66%, var(--accent-dark) 66%); }
+  .cake.layers div:nth-child(1) { background: var(--accent-light); }
+  .cake.layers div:nth-child(2) { background: var(--accent); }
+  .cake.layers div:nth-child(3) { background: var(--accent-dark); }
+
+  /* TDD loop */
+  .tdd { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 6px 0 24px; }
+  .tdd .box { border-radius: 14px; padding: 14px 18px; text-align: center; min-width: 200px; }
+  .tdd .box b { display: block; font-size: 1.1rem; }
+  .tdd .red { background: var(--red-soft); color: var(--red); border: 2px solid var(--red); }
+  .tdd .green { background: var(--green-soft); color: var(--green); border: 2px solid var(--green); }
+  .tdd .arrow { font-size: 1.6rem; color: var(--muted); }
+  .tdd .box small { color: var(--ink); display: block; }
+
+  /* Review axes */
+  .axes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 24px; }
+  .axes .card h3 { display: flex; align-items: center; gap: 10px; }
+
+  /* Loop back */
+  .loopback {
+    text-align: center; padding: 28px; border: 2px dashed var(--accent); border-radius: var(--radius);
+    background: var(--card); margin-top: 28px;
+  }
+  .loopback .big { font-size: 2rem; }
+
+  /* Setup box */
+  .setup {
+    background: var(--card); border: 2px solid var(--accent); border-radius: var(--radius);
+    padding: 28px 30px; box-shadow: var(--shadow); margin-bottom: 28px;
+  }
+  .setup h3 { font-size: 1.4rem; }
+  .setup-steps { display: grid; gap: 18px; margin: 18px 0; }
+  .setup-step { display: flex; gap: 16px; align-items: flex-start; background: var(--bg); border-radius: 14px; padding: 16px 18px; }
+  .setup-n {
+    flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--on-dark);
+    display: grid; place-items: center; font-weight: 700; font-size: 1.2rem;
+  }
+  .setup-step h4 { margin: 4px 0 6px; font-size: 1.1rem; }
+  .setup-step h4 small { color: var(--muted); font-weight: 500; }
+  .setup-step p { margin: 0 0 6px; }
+  .setup-step p.small { color: var(--muted); font-size: .9rem; margin: 0; }
+  .term {
+    background: var(--ink); color: var(--on-dark); border-radius: 10px; padding: 10px 14px;
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9rem; overflow-x: auto; white-space: nowrap;
+  }
+  .term::before { content: "$ "; color: var(--term-dim); }
+  .term.ask { white-space: normal; font-family: inherit; }
+  .term.ask::before { content: "💬 "; }
+  .setup-done { margin: 0; font-weight: 600; }
+
+  /* Overview strip in basics */
+  .flow-strip { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; margin: 20px 0 6px; }
+  .flow-strip .pill { background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; font-weight: 600; }
+  .flow-strip .arr { color: var(--muted); }
+
+  /* Cheat sheet */
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--bar); font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+  td.c { white-space: nowrap; }
+  td .cmd { background: var(--ink); color: var(--on-dark); padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+  .print-btn {
+    margin-top: 18px; background: var(--accent); color: var(--on-dark); border: 0; border-radius: 10px;
+    padding: 10px 18px; font: inherit; font-weight: 600; cursor: pointer;
+  }
+  .print-btn:hover { filter: brightness(1.05); }
+
+  footer { text-align: center; color: var(--muted); padding: 40px 0 60px; font-size: .9rem; }
+
+  @media (max-width: 720px) {
+    html { scroll-padding-top: 160px; }
+    .map a { min-width: 0; padding: 4px 6px; }
+    .map .lbl { font-size: .7rem; }
+    .map .ico { font-size: 1.2rem; }
+    .map li + li::before { margin: 0 2px; }
+  }
+
+  /* Print: only the cheat sheet, on one page */
+  @media print {
+    body { background: var(--on-dark); font-size: 12pt; }
+    .hero, .map, section:not(#cheatsheet), footer, .print-btn { display: none !important; }
+    #cheatsheet { padding: 0; border: 0; }
+    table { box-shadow: none; }
+    th { background: var(--print-th) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    td .cmd { background: none; color: var(--print-ink); padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <a class="lang-switch" href="index.html" lang="en">🇬🇧 English</a>
+  <div class="wrap">
+    <div class="kicker">Le guide du débutant</div>
+    <h1>Développer <span class="accent">avec</span> un agent IA,<br>une étape claire à la fois</h1>
+    <p class="lead">Six skills vous emmènent d'une idée floue à du code qui marche, testé et relu. Vous gardez la main à chaque étape.</p>
+  </div>
+</header>
+
+<!-- ================= STICKY MAP ================= -->
+<nav class="map" aria-label="Étapes du workflow">
+  <ol>
+    <li class="side"><a href="#basics"><span class="ico">📘</span><span class="lbl">Les bases</span></a></li>
+    <li><a href="#grill"><span class="ico">🔥</span><span class="lbl">1. Grill me</span></a></li>
+    <li><a href="#spec"><span class="ico">📄</span><span class="lbl">2. Spec</span></a></li>
+    <li><a href="#tickets"><span class="ico">🎟️</span><span class="lbl">3. Tickets</span></a></li>
+    <li><a href="#implement"><span class="ico">🛠️</span><span class="lbl">4. Code + TDD</span></a></li>
+    <li><a href="#review"><span class="ico">🔍</span><span class="lbl">5. Revue</span></a></li>
+    <li><a href="#retro"><span class="ico">🪞</span><span class="lbl">6. Rétro</span></a></li>
+    <li class="side"><a href="#cheatsheet"><span class="ico">📋</span><span class="lbl">Antisèche</span></a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ================= BASICS ================= -->
+<section id="basics">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📘</div>
+      <div>
+        <div class="step-num">Avant de commencer</div>
+        <h2>Les bases</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:28px">
+      <div class="card">
+        <span class="big">🤖</span>
+        <h3>Qu'est-ce qu'un agent de code ?</h3>
+        <p>Un assistant IA qui travaille <strong>dans le dossier de votre projet</strong>. Il lit vos fichiers, écrit du code et lance des commandes, comme un collègue assis à votre ordinateur. Exemples : Claude Code, Codex, Cursor.</p>
+      </div>
+      <div class="card">
+        <span class="big">🧩</span>
+        <h3>Qu'est-ce qu'un skill ?</h3>
+        <p>Une <strong>fiche recette</strong> que l'agent suit pour une tâche précise. On lance un skill en tapant une barre oblique suivie de son nom, par exemple <code>/grill-with-docs</code>.</p>
+      </div>
+    </div>
+
+    <div class="setup">
+      <h3>⚙️ Installation : une fois par projet, environ 5 minutes</h3>
+      <p style="color:var(--muted)">Ça transforme un projet normal en un projet où votre agent travaille bien. Marche sur un projet neuf <em>ou</em> existant.</p>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-n">1</div>
+          <div>
+            <h4>Installer les skills <small>(une fois par ordinateur)</small></h4>
+            <p>Demandez simplement à votre agent :</p>
+            <div class="term ask">Installe les skills de Matt Pocock (mattpocock-skills, depuis le marketplace officiel de plugins Claude).</div>
+            <p class="small">Marche avec la plupart des agents de code. Source : github.com/mattpocock/skills</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-n">2</div>
+          <div>
+            <h4>Donner un guide du projet à l'agent : <code>/init</code></h4>
+            <p>La plupart des agents ont une commande init. L'agent parcourt votre projet et écrit un fichier guide (<code>CLAUDE.md</code> ou <code>AGENTS.md</code>, selon l'agent) : comment lancer, tester et construire le projet, et où se trouvent les choses. L'agent le lit au début de chaque session.</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-n">3</div>
+          <div>
+            <h4>Brancher les skills : <code>/setup-matt-pocock-skills</code></h4>
+            <p>Pose 2–3 questions, puis ajoute une section « Agent skills » à votre guide et écrit quelques petits fichiers de config dans <code>docs/agents/</code>.</p>
+            <p class="small">Quand il demande où ranger les tickets, choisissez <strong>fichiers locaux</strong>. Pas besoin de compte GitHub.</p>
+          </div>
+        </div>
+      </div>
+      <p class="setup-done">✅ C'est prêt. Votre projet est paré pour les 6 étapes ci-dessous.</p>
+    </div>
+
+    <div class="card">
+      <h3>💡 Pourquoi suivre un workflow ?</h3>
+      <p>La raison n°1 pour laquelle le code avec l'IA tourne mal : <strong>l'agent construit quelque chose, mais pas ce que vous vouliez.</strong> La solution : ralentir au début. On se met d'accord sur l'idée, on l'écrit, on la découpe en petits morceaux, et seulement ensuite on code.</p>
+      <p style="margin:0">Pensez à la construction d'une maison : 🗣️ discussion avec l'architecte → 📐 plan → 📋 bons de travaux → 🧱 construction, avec des contrôles en cours de route → 🔍 inspection finale → 🪞 débrief d'équipe.</p>
+      <div class="flow-strip">
+        <span class="pill">🔥 Grill with docs</span><span class="arr">→</span>
+        <span class="pill">📄 Spec</span><span class="arr">→</span>
+        <span class="pill">🎟️ Tickets</span><span class="arr">→</span>
+        <span class="pill">🛠️ Code + TDD</span><span class="arr">→</span>
+        <span class="pill">🔍 Revue</span><span class="arr">→</span>
+        <span class="pill">🪞 Rétro</span>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;color:var(--muted)">📌 <strong>Notre exemple du début à la fin :</strong> ajouter un <strong>mode sombre</strong> à une petite app de liste de tâches.</p>
+  </div>
+</section>
+
+<!-- ================= 1. GRILL ME ================= -->
+<section id="grill">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🔥</div>
+      <div>
+        <div class="step-num">Étape 1</div>
+        <h2>Grill me (with docs)</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/grill-with-docs</span>
+    <p class="oneliner">L'agent <strong>vous interroge</strong> avec plein de questions jusqu'à ce que vous soyez d'accord sur ce qu'il faut construire, et <strong>note</strong> au fur et à mesure le vocabulaire du projet et les grandes décisions.</p>
+    <p class="analogy">🏠 Comme un bon architecte qui demande « Combien de chambres ? Grande cuisine ou petite ? » <em>avant</em> de dessiner quoi que ce soit.</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">Vous</span>
+        <ul><li>Décrivez votre idée en une phrase</li><li>Répondez à chaque question (des réponses courtes suffisent)</li><li>Dites « je ne sais pas » quand c'est le cas. L'agent propose une réponse.</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">Agent</span>
+        <ul><li>Pose les questions par petites séries</li><li>Propose une réponse recommandée pour chacune</li><li>Continue jusqu'à ce que plus rien ne soit flou</li><li>Met à jour le glossaire (<code>GLOSSARY.md</code>) et les notes de décision (<code>docs/adr/</code>)</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">Exemple</div>
+    <div class="chat">
+      <div class="chat-bar"><i></i><i></i><i></i><span>Agent de code : todo-app</span></div>
+      <div class="msg you"><div class="who">Vous</div><div class="text">/grill-with-docs Je veux ajouter un mode sombre à mon app de tâches</div></div>
+      <div class="msg claude"><div class="who">Agent</div><div class="text">
+        <p><strong>Q1 :</strong> Doit-il suivre le réglage clair/sombre de l'ordinateur, ou passer par un bouton ? <em>→ Je recommande les deux : suivre l'ordinateur par défaut, avec un bouton pour changer.</em></p>
+        <p><strong>Q2 :</strong> L'app doit-elle se souvenir de votre choix après un rechargement ? <em>→ Oui.</em></p>
+      </div></div>
+      <div class="msg you"><div class="who">Vous</div><div class="text">Les deux, oui. Et oui, garde le choix en mémoire.</div></div>
+      <div class="msg claude"><div class="who">Agent</div><div class="text"><p>Série suivante. <strong>Q3 :</strong> Où placer le bouton ?…</p></div></div>
+    </div>
+
+    <div class="example-label">Ce qu'il écrit en chemin</div>
+    <div class="file"><span class="path">GLOSSARY.md</span><b>Thème</b> : le jeu de couleurs utilisé par l'app, « clair » ou « sombre ».
+<b>Thème système</b> : le réglage clair/sombre de l'ordinateur de l'utilisateur.</div>
+    <p style="color:var(--muted);font-size:.95rem">Pourquoi c'est utile : la prochaine fois, vous et l'agent utilisez <strong>les mêmes mots</strong> pour les mêmes choses. Moins de malentendus, des réponses plus courtes. (<code>/grill-me</code> tout court fait l'interview sans les docs. Pratique pour les sujets hors code.)</p>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Astuce :</strong> c'est l'étape que tout le monde saute, et c'est la plus importante. Dix minutes de questions évitent des heures à corriger la mauvaise chose. Utilisez-la <em>à chaque fois</em>.</p></div>
+  </div>
+</section>
+
+<!-- ================= 2. SPEC ================= -->
+<section id="spec">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📄</div>
+      <div>
+        <div class="step-num">Étape 2</div>
+        <h2>Écrire la spec</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/to-spec</span>
+    <p class="oneliner">L'agent transforme votre conversation en <strong>plan écrit</strong> (une « spec »). Pas de nouvelles questions, il écrit juste ce que vous avez décidé.</p>
+    <p class="analogy">🏠 Le plan de la maison. Tout le monde peut le relire plus tard et vérifier « c'est bien ce qu'on avait dit ? »</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">Vous</span>
+        <ul><li>Lancez-le juste après l'interview, dans la même conversation</li><li>Validez comment l'agent compte tester la fonctionnalité</li><li>Lisez la spec. Corrigez ce qui ne va pas.</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">Agent</span>
+        <ul><li>Parcourt votre code</li><li>Écrit la spec dans un fichier</li><li>Liste aussi ce qui est <em>hors périmètre</em></li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">Exemple : ce que l'agent écrit</div>
+    <div class="file"><span class="path">.scratch/dark-mode/spec.md</span><b>## Problème</b>
+L'app est trop lumineuse le soir.
+
+<b>## Solution</b>
+Un thème sombre qui suit le réglage de l'ordinateur, avec un bouton pour basculer.
+
+<b>## User stories</b>
+1. En tant qu'utilisateur, je veux l'app en sombre quand mon ordinateur est en mode sombre…
+2. En tant qu'utilisateur, je veux un bouton pour changer de thème…
+3. En tant qu'utilisateur, je veux que mon choix soit gardé après rechargement…
+
+<b>## Hors périmètre</b>
+<span class="dim">Couleurs personnalisées, mode sombre automatique au coucher du soleil.</span></div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Astuce :</strong> la spec, c'est <strong>votre</strong> document. Si quelque chose cloche, dites-le maintenant. Corriger une phrase coûte bien moins cher que corriger du code.</p></div>
+  </div>
+</section>
+
+<!-- ================= 3. TICKETS ================= -->
+<section id="tickets">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🎟️</div>
+      <div>
+        <div class="step-num">Étape 3</div>
+        <h2>Découper en tickets</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/to-tickets</span>
+    <p class="oneliner">L'agent découpe la spec en <strong>petits tickets</strong>. Chacun est un petit morceau qui fonctionne tout seul.</p>
+    <p class="analogy">🏠 Les bons de travaux : « plomberie de la cuisine », « électricité de la chambre ». Une équipe, une tâche, une journée.</p>
+
+    <div class="slices">
+      <div class="card">
+        <h3>✅ Bien : des parts</h3>
+        <div class="cake slicesv"><div>01</div><div>02</div><div>03</div></div>
+        <p style="margin:0">Chaque ticket traverse <strong>toutes les couches</strong> (écran, logique, sauvegarde) pour une petite fonctionnalité. On peut l'essayer dès qu'il est fini.</p>
+      </div>
+      <div class="card">
+        <h3>❌ Mal : des étages</h3>
+        <div class="cake layers"><div>tous les écrans</div><div>toute la logique</div><div>toute la sauvegarde</div></div>
+        <p style="margin:0">« D'abord tous les écrans, puis toute la logique… » Rien ne marche avant la toute fin.</p>
+      </div>
+    </div>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">Vous</span>
+        <ul><li>Vérifiez la liste proposée</li><li>Trop gros ? Trop petit ? Demandez de découper ou de fusionner.</li><li>Validez</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">Agent</span>
+        <ul><li>Propose les tickets, dans l'ordre</li><li>Indique quel ticket doit attendre lequel</li><li>Enregistre un fichier par ticket</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">Exemple : les tickets du mode sombre</div>
+    <div class="tickets">
+      <div class="ticket"><div class="n">01</div><strong>Un bouton change le thème</strong><div class="blk">Attend : rien, on peut commencer</div></div>
+      <div class="ticket"><div class="n">02</div><strong>Garder le choix après rechargement</strong><div class="blk">Attend : 01</div></div>
+      <div class="ticket"><div class="n">03</div><strong>Suivre le réglage de l'ordinateur par défaut</strong><div class="blk">Attend : 01</div></div>
+    </div>
+    <p style="color:var(--muted);font-size:.9rem">Enregistrés sous <code>.scratch/dark-mode/issues/01-toggle-button.md</code>, <code>02-…</code>, <code>03-…</code></p>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Astuce :</strong> chaque ticket est taillé pour tenir dans <strong>une session neuve de l'agent</strong>. Des petits tickets, c'est un agent concentré qui fait moins d'erreurs.</p></div>
+  </div>
+</section>
+
+<!-- ================= 4. IMPLEMENT + TDD ================= -->
+<section id="implement">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🛠️</div>
+      <div>
+        <div class="step-num">Étape 4</div>
+        <h2>Coder, en testant d'abord (TDD)</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/implement</span>
+    <p class="oneliner">L'agent réalise <strong>un ticket</strong> en écrivant <strong>d'abord le test</strong>, puis le code qui le fait passer.</p>
+    <p class="analogy">🏠 Avant de monter un mur, on écrit le contrôle : « le mur doit être droit ». On construit. On contrôle. Mur suivant.</p>
+
+    <h3>La boucle TDD (développement piloté par les tests)</h3>
+    <div class="tdd">
+      <div class="box red"><b>🔴 Rouge</b><small>Écrire un test pour un petit comportement.<br>Il échoue, car le code n'existe pas encore.</small></div>
+      <div class="arrow">→</div>
+      <div class="box green"><b>🟢 Vert</b><small>Écrire juste assez de code<br>pour que le test passe.</small></div>
+      <div class="arrow">↻</div>
+      <div class="box" style="background:var(--card);border:2px dashed var(--line)"><b>Recommencer</b><small>Comportement suivant,<br>jusqu'à la fin du ticket.</small></div>
+    </div>
+    <p>Pourquoi ? Les tests donnent à l'agent une <strong>preuve</strong> que son code marche, au lieu de simplement y croire. Sans tests, il avance à l'aveugle.</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">Vous</span>
+        <ul><li>Ouvrez une <strong>session neuve</strong> (<code>/clear</code> ou nouvelle conversation)</li><li>Indiquez un ticket à l'agent</li><li>Validez ce qui sera testé</li><li>Observez, et intervenez s'il part dans la mauvaise direction</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">Agent</span>
+        <ul><li>Enchaîne la boucle rouge → vert</li><li>Lance tous les tests à la fin</li><li>Lance la revue (étape 5) tout seul</li><li>Enregistre le travail (commit git)</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">Exemple</div>
+    <div class="chat">
+      <div class="chat-bar"><i></i><i></i><i></i><span>Agent de code : todo-app (session neuve)</span></div>
+      <div class="msg you"><div class="who">Vous</div><div class="text">/clear<br>/implement .scratch/dark-mode/issues/01-toggle-button.md</div></div>
+      <div class="msg claude"><div class="who">Agent</div><div class="text">
+        <p>🔴 Test : « cliquer sur le bouton de thème rend la page sombre ». Échoue, comme prévu.</p>
+        <p>🟢 Ajouté le bouton et les couleurs sombres. Le test passe.</p>
+        <p>🔴 Test : « cliquer deux fois revient au clair »… 🟢 passe.</p>
+        <p>✅ Tous les tests passent. Commit fait. Je lance la revue…</p>
+      </div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px">
+      <h3>⚡ Option rapide : tous les tickets d'un coup avec <code>/implement-spec</code></h3>
+      <p>Au lieu d'un ticket par session, l'agent lance <strong>plusieurs agents assistants en parallèle</strong>. Chacun travaille dans sa propre copie du projet, un ticket chacun, en testant d'abord. Quand un ticket est fini, son travail est fusionné dans une branche commune. Les tickets en attente démarrent dès que ceux qui les bloquaient sont finis. À la fin, une seule revue de l'ensemble.</p>
+      <p style="margin:0;color:var(--muted);font-size:.95rem">Idéal quand il y a beaucoup de tickets. Commencez par <code>/implement</code>, un ticket à la fois, jusqu'à ce que le workflow vous soit familier. C'est plus facile à suivre et à piloter.</p>
+    </div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Astuce :</strong> envie de tester d'abord pour une petite correction hors de ce workflow ? Tapez juste <code>/tdd</code>. C'est la même boucle.</p></div>
+  </div>
+</section>
+
+<!-- ================= 5. REVIEW ================= -->
+<section id="review">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🔍</div>
+      <div>
+        <div class="step-num">Étape 5</div>
+        <h2>Revue de code</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/code-review</span>
+    <p class="oneliner">Deux relecteurs séparés vérifient le travail. <strong>Le code est-il propre ?</strong> Et <strong>fait-il ce que le ticket demandait ?</strong></p>
+    <p class="analogy">🏠 L'inspection finale. Un inspecteur vérifie les normes de construction, un autre vérifie que tout correspond au plan.</p>
+
+    <div class="axes">
+      <div class="card">
+        <h3>📏 Standards</h3>
+        <p style="margin:0">Le code suit-il les règles du projet ? Des noms clairs ? Pas de copier-coller ? Rien de trop compliqué ?</p>
+      </div>
+      <div class="card">
+        <h3>🎯 Spec</h3>
+        <p style="margin:0">Fait-il <strong>tout</strong> ce que le ticket demandait, et <strong>rien de plus</strong> ? Quelque chose qui manque, qui est faux ou en trop ?</p>
+      </div>
+    </div>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">Vous</span>
+        <ul><li>Lisez les deux rapports</li><li>Décidez quoi corriger : « corrige 1 et 3, ignore 2 »</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">Agent</span>
+        <ul><li>Lance les deux relecteurs côte à côte</li><li>Signale les problèmes, sans rien corriger de lui-même</li><li>Corrige ce que vous choisissez</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">Exemple : rapport de revue</div>
+    <div class="file"><b>## Standards</b>  (1 point)
+- Nom peut-être peu clair : la variable `t` devrait s'appeler `theme`.
+
+<b>## Spec</b>  (1 point)
+- En trop : ajout d'un thème « sépia », que le ticket ne demandait pas.</div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Astuce :</strong> <code>/implement</code> lance la revue pour vous à la fin. Pour la lancer vous-même, donnez un point de départ, par exemple <code>/code-review main</code> (tout ce qui a changé depuis la branche main).</p></div>
+
+    <div class="loopback">
+      <div class="big">🔁</div>
+      <h3>Ticket suivant ? Retour à l'étape 4.</h3>
+      <p style="margin:0">Session neuve → <code>/implement</code> ticket 02 → revue → ticket 03… jusqu'à ce que tous les tickets soient faits. Puis l'étape 6. 🎉</p>
+      <p style="margin:10px 0 0;color:var(--muted)">⚡ Beaucoup de tickets ? <code>/implement-spec</code> fait toute cette boucle d'un coup, en parallèle, avec une revue à la fin (voir l'étape 4).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. RETRO ================= -->
+<section id="retro">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🪞</div>
+      <div>
+        <div class="step-num">Étape 6</div>
+        <h2>Rétro : tirer les leçons de la session</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/retro</span>
+    <p class="oneliner">L'agent revient sur le déroulé du travail et propose des façons d'<strong>améliorer sa propre configuration</strong>, pour que la prochaine fonctionnalité se passe mieux. Il change la configuration, pas le code.</p>
+    <p class="analogy">🏠 Le débrief d'équipe une fois la maison finie : « Qu'est-ce qui nous a ralentis ? Qu'est-ce qu'on devrait vérifier automatiquement la prochaine fois ? »</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">Vous</span>
+        <ul><li>Lancez-la quand tous les tickets sont faits, ou après une session difficile</li><li>Choisissez les suggestions à appliquer</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">Agent</span>
+        <ul><li>Relit la session</li><li>Repère ce qui a été lent ou raté</li><li>Propose des corrections, les plus importantes d'abord</li></ul>
+      </div>
+    </div>
+
+    <h3>Ce qu'il cherche</h3>
+    <div class="grid grid-3" style="margin-bottom:24px">
+      <div class="card"><span class="big">🧭</span><h3>Trouver les choses</h3><p style="margin:0">L'agent a perdu du temps à chercher des fichiers ? Ajouter un repère dans le guide du projet.</p></div>
+      <div class="card"><span class="big">🚦</span><h3>Contrôles automatiques</h3><p style="margin:0">Un linter, un test ou un contrôle avant commit aurait-il attrapé une erreur ? L'ajouter.</p></div>
+      <div class="card"><span class="big">📏</span><h3>Règles</h3><p style="margin:0">La revue a raté quelque chose ? Ajouter une règle aux standards de code, ou en retirer une inutile.</p></div>
+    </div>
+
+    <div class="example-label">Exemple</div>
+    <div class="chat">
+      <div class="chat-bar"><i></i><i></i><i></i><span>Agent de code : todo-app</span></div>
+      <div class="msg you"><div class="who">Vous</div><div class="text">/retro</div></div>
+      <div class="msg claude"><div class="who">Agent</div><div class="text">
+        <p><strong>1. Contrôles automatiques :</strong> j'ai fait un commit avec un test en échec. Ajouter un contrôle avant commit qui lance les tests.</p>
+        <p><strong>2. Trouver les choses :</strong> j'ai fouillé 6 fichiers pour trouver les couleurs. Ajouter une ligne dans <code>AGENTS.md</code> : « Les couleurs du thème sont dans <code>styles/theme.css</code> ».</p>
+      </div></div>
+      <div class="msg you"><div class="who">Vous</div><div class="text">Fais les deux.</div></div>
+    </div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Astuce :</strong> chaque rétro rend l'agent un peu meilleur <strong>sur votre projet</strong>. Les petites améliorations s'additionnent vite.</p></div>
+  </div>
+</section>
+
+<!-- ================= CHEAT SHEET ================= -->
+<section id="cheatsheet">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📋</div>
+      <div>
+        <div class="step-num">À garder sous la main</div>
+        <h2>Antisèche</h2>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Étape</th><th>À taper</th><th>Ce qui se passe</th><th>Votre rôle</th></tr></thead>
+      <tbody>
+        <tr><td class="c">0 · Installation <small>(une fois)</small></td><td class="c"><span class="cmd">/init</span> puis <span class="cmd">/setup-matt-pocock-skills</span></td><td>Écrit le guide du projet (<code>CLAUDE.md</code> ou <code>AGENTS.md</code>), puis branche les skills. Choisir « fichiers locaux ».</td><td>Répondre à 3 questions</td></tr>
+        <tr><td class="c">1 · 🔥 Grill me</td><td class="c"><span class="cmd">/grill-with-docs</span> + idée</td><td>L'agent vous interroge jusqu'à ce que l'idée soit claire, et met à jour le glossaire</td><td>Répondre aux questions</td></tr>
+        <tr><td class="c">2 · 📄 Spec</td><td class="c"><span class="cmd">/to-spec</span></td><td>Écrit le plan dans <code>spec.md</code></td><td>Le relire, le corriger</td></tr>
+        <tr><td class="c">3 · 🎟️ Tickets</td><td class="c"><span class="cmd">/to-tickets</span></td><td>Découpe la spec en petites parts qui marchent seules</td><td>Valider la liste</td></tr>
+        <tr><td class="c">4 · 🛠️ Code + TDD</td><td class="c"><span class="cmd">/clear</span> puis <span class="cmd">/implement</span> ticket</td><td>Test d'abord 🔴, puis code 🟢, on recommence. Commit.</td><td>Observer, piloter</td></tr>
+        <tr><td class="c">5 · 🔍 Revue</td><td class="c"><span class="cmd">/code-review</span> <small>(auto)</small></td><td>Deux contrôles : code propre + conforme au ticket</td><td>Choisir quoi corriger</td></tr>
+        <tr><td class="c">🔁</td><td colspan="3">Refaire les étapes 4–5 pour chaque ticket. Ou lancer <span class="cmd">/implement-spec</span> pour tous les faire en parallèle.</td></tr>
+        <tr><td class="c">6 · 🪞 Rétro</td><td class="c"><span class="cmd">/retro</span></td><td>Propose des améliorations de la config de l'agent pour que la suite se passe mieux</td><td>Choisir quoi appliquer</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px;color:var(--muted);font-size:.9rem">Règle d'or : <strong>parler d'abord, coder en dernier.</strong> Des petits pas, une session neuve par ticket, les tests comme preuve, une rétro après chaque fonctionnalité.</p>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer l'antisèche</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Basé sur les <a href="https://github.com/mattpocock/skills" style="color:var(--accent)">skills de Matt Pocock</a> pour agents de code.
+  À jour avec la version 1.3.1 (octobre 2026).
+  Dans le menu des commandes, les skills peuvent apparaître avec un préfixe, par exemple <code>/mattpocock-skills:grill-with-docs</code>.
+</footer>
+
+<script>
+  // Highlight the current step in the sticky map while scrolling
+  const links = document.querySelectorAll('.map a');
+  const byId = Object.fromEntries([...links].map(a => [a.getAttribute('href').slice(1), a]));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      links.forEach(a => a.classList.remove('active'));
+      byId[e.target.id]?.classList.add('active');
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  document.querySelectorAll('main section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
