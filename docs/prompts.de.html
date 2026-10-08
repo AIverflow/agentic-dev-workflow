@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Der agentische Entwicklungs-Workflow: fertige Prompts</title>
+<title>Erst reden, dann coden: fertige Prompts</title>
+<meta name="description" content="Prompts zum Kopieren für deinen Coding-Agenten: einfach erklären, mit einem Diagramm lehren, ein Repo erkunden und den Agenten einen Prompt für dich schreiben lassen.">
+<meta property="og:title" content="Erst reden, dann coden: fertige Prompts">
+<meta property="og:description" content="Prompts zum Kopieren für deinen Coding-Agenten: einfach erklären, mit einem Diagramm lehren, ein Repo erkunden und den Agenten einen Prompt für dich schreiben lassen.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,11 +30,12 @@
 <section id="prompts">
   <div class="wrap">
     <div class="grid grid-1">
-  <article class="card prompt-card">
+  <article class="card prompt-card" id="eli5">
     <h3>🧒 Einfach erklären (ELI5)</h3>
     <p>Nutze ihn, wenn ein Thema schwer wirkt. Der Agent erklärt es in einfachen Worten und prüft dann, ob du es verstanden hast.</p>
-    <p class="fill">Ausfüllen: <code>[THEMA]</code></p>
+    <p class="fill">Ausfüllen: <code>[THEMA]</code> <code>[WAS ICH SCHON WEISS]</code></p>
     <pre class="prompt"><code>Erkläre [THEMA] einem absoluten Anfänger, als wäre ich 5 Jahre alt.
+Was ich schon weiß: [WAS ICH SCHON WEISS, z. B. "Ich nutze git, aber habe noch nie von rebase gehört"].
 - Maximal 150 Wörter (ohne die Fragen). Kurze Sätze. Kein Fachjargon; wenn ein Begriff unvermeidbar ist, erkläre ihn in 5 Wörtern.
 - Beginne mit einer Alltagsanalogie (Küche, Post, usw.), dann ein Satz dazu, wo die Analogie nicht mehr passt.
 - Dann ein konkretes Beispiel mit echten Werten.
@@ -37,7 +43,7 @@
 - Stelle mir dann 2 Fragen, um zu prüfen, ob ich es verstanden habe, und warte. Beantworte sie nicht selbst.
   Wenn ich antworte, korrigiere jede Antwort in 1–2 Sätzen.</code></pre>
   </article>
-  <article class="card prompt-card">
+  <article class="card prompt-card" id="diagram">
     <h3>🖼️ Mit einem Diagramm erklären</h3>
     <p>Nutze ihn, wenn ein Thema, ein Problem oder ein Ablauf schwer zu verstehen ist. Der Agent baut eine einzige HTML-Seite mit einem Diagramm.</p>
     <p class="fill">Ausfüllen: <code>[THEMA / PROBLEM / ABLAUF]</code> <code>[PUBLIKUM]</code></p>
@@ -46,7 +52,7 @@ Das Ziel ist Verständnis, nicht Dekoration.
 
 Zuerst: Wenn das Thema oder das Publikum unklar ist, stelle mir bis zu 3 Fragen und warte.
 
-Publikum: [Hochschulabsolvent | Junior-Entwickler | Nicht-Techniker].
+Publikum: [PUBLIKUM: Hochschulabsolvent | Junior-Entwickler | Nicht-Techniker].
 Erkläre die Sache selbst, in einfachen Worten, auf diesem Niveau.
 Definiere jeden Begriff, den dieses Publikum vielleicht nicht kennt, beim ersten Auftreten,
 in weniger als 8 Wörtern. Lass Definitionen weg bei Begriffen, die es schon kennt.
@@ -60,6 +66,7 @@ Seitenaufbau, in dieser Reihenfolge:
      Entscheidungen sind Rauten; Schleifen sind Pfeile, die zurückführen.
    - Unter dem Diagramm ein einfacher Satz pro nummeriertem Schritt: was passiert und warum.
 4. Ein durchgerechnetes Beispiel mit echten Werten, Schritt für Schritt durch die nummerierten Schritte.
+   Wenn dieses Projekt einen echten Fall hat, nimm ihn.
 5. Häufige Fehler: höchstens 3 Stichpunkte.
 6. "Merke dir": ein Satz.
 
@@ -75,11 +82,11 @@ Technische Regeln:
 
 Speichere als [thema-name].html.</code></pre>
   </article>
-  <article class="card prompt-card">
+  <article class="card prompt-card" id="onboarding">
     <h3>🗺️ Führ mich durch dieses Repo</h3>
     <p>Nutze ihn, wenn du ein Projekt öffnest, das du noch nicht kennst. Der Agent liest den Code (ohne Änderungen) und gibt dir eine Übersicht, ein echtes Beispiel und was du zuerst lesen solltest.</p>
     <p class="fill">Ausfüllen: <code>[BEREICH]</code></p>
-    <pre class="prompt"><code>Führ mich durch [BEREICH] in diesem Repo. Ich bin neu hier. Nur lesen: Ändere nichts.
+    <pre class="prompt"><code>Führ mich durch [BEREICH, oder "das ganze Repo"] in diesem Repo. Ich bin neu hier. Nur lesen: Ändere nichts.
 
 1. In 3 Sätzen: was dieses Projekt macht und wer es nutzt.
 2. Der Stack: Sprache, Framework, und wie man es startet und seine Tests laufen lässt.
@@ -90,99 +97,10 @@ Speichere als [thema-name].html.</code></pre>
 6. Als Nächstes lesen: die 5 Dateien, die ich zuerst lesen sollte, in Reihenfolge, mit einer Zeile dazu, warum.
 
 Regeln:
+- Maximal 80 Zeilen.
 - Einfache Wörter, kurze Sätze. Erkläre jeden Begriff, den ein Junior-Entwickler vielleicht nicht kennt.
 - Verweise auf echte Dateien (path:line). Rate nicht: Wenn du dir nicht sicher bist, sag es.
 - Frag mich dann, was ich ändern möchte, und warte.</code></pre>
-  </article>
-  <article class="card prompt-card">
-    <h3>📦 Übergabe an eine neue Sitzung</h3>
-    <p>Nutze ihn, wenn die Sitzung lang wird, der Agent Dinge vergisst oder ein Schritt fertig ist. Der Agent schreibt eine kurze Notiz, dann liest eine neue Sitzung sie und macht weiter.</p>
-    <p class="fill">Nichts auszufüllen. In der neuen Sitzung sagst du: <code>Lies handoff.md und mach weiter.</code></p>
-    <pre class="prompt"><code>Wir beenden diese Sitzung. Schreibe eine Übergabe-Notiz, damit ein neuer Agent, ohne Erinnerung an diesen Chat,
-weiterarbeiten kann. Speichere sie als handoff.md.
-
-Abschnitte, in dieser Reihenfolge:
-1. Ziel: was wir bauen, in 2 Sätzen.
-2. Entscheidungen: was wir gewählt haben, und warum, eine Zeile pro Punkt.
-   Nenne auch die verworfenen Optionen, damit niemand sie wieder aufrollt.
-3. Erledigt: was fertig ist und funktioniert (mit Dateipfaden).
-4. Offen: was noch zu tun ist, in Reihenfolge, der kleinste nächste Schritt zuerst.
-5. Offene Fragen: alles, was ich noch entscheiden muss.
-6. Achtung: Fallen, in die wir getappt sind, und Dinge, die richtig aussahen, aber falsch waren.
-7. Zuerst lesen: die Dateien, die der neue Agent öffnen soll, mit einer Zeile dazu, warum.
-
-Regeln:
-- Maximal 60 Zeilen. Nur Fakten, keine Geschichte des Chats.
-- Verweise auf Dateien und Commits, füge keinen Code ein.
-- Ändere jetzt keinen Code.
-- Zeig mir die Notiz, wenn du fertig bist, damit ich sie korrigieren kann, bevor wir wechseln.</code></pre>
-  </article>
-  <article class="card prompt-card">
-    <h3>🎟️ Tickets parallel bauen</h3>
-    <p>Nutze ihn, um viele Tickets auf einmal zu bauen. Ein Orchestrator-Agent plant, prüft und committet, und Helfer-Agenten schreiben den Code.</p>
-    <p class="fill">Ausfüllen: <code>Tickets</code> <code>Basis-Branch</code> <code>Max. parallele Tickets</code></p>
-    <pre class="prompt"><code>Du bist der **Orchestrator** für den Bau einer Reihe von Tickets.
-Du planst, verteilst die Arbeit, prüfst und committest. Helfer-Sub-Agenten schreiben den Code.
-
-## Eingaben (ausfüllen)
-
-- **Tickets:** &lt;Pfad zu einem Ordner oder einer Spezifikation, Issue-Nummern/URLs oder eine eingefügte Liste&gt;
-- **Basis-Branch:** &lt;z. B. main&gt;
-- **Max. parallele Tickets:** &lt;Standard 3&gt;
-
-## Grundregeln
-
-- Ich entscheide. Triff nie eine Vermutung bei einer Produkt- oder Design-Frage: frag mich.
-- Folge der `AGENTS.md` / `CLAUDE.md` des Repos, den Coding-Standards und den Commit-Konventionen.
-- Gib Helfern **Verweise**, keine Kopien: Pfad oder URL des Tickets, Pfad der Spezifikation, relevante Dateien.
-- Nicht pushen, keine PRs öffnen und keine Tickets schließen, außer ich sage es.
-- Alle arbeiten im selben Ordner, auf einem Branch. Zwei Tickets laufen nur gleichzeitig, wenn sie **verschiedene Dateien** berühren. Sonst laufen sie nacheinander.
-- Wenn du keine Sub-Agenten parallel laufen lassen kannst, bearbeite die Tickets einzeln, eins nach dem anderen.
-
-## Schritt 1: planen, dann auf mein OK warten
-
-1. Lies jedes Ticket, seine Spezifikation sowie das Glossar und die Coding-Standards des Repos, falls vorhanden.
-2. Finde die Befehle für Typprüfung, Lint, eine einzelne Testdatei und die volle Testsuite.
-3. Zeig mir:
-   - eine Tabelle: Ticket, blockiert durch (Vermutungen als "abgeleitet" markieren), Dateien, die es wahrscheinlich berührt
-   - die erste Runde: Tickets ohne offene Blocker und ohne gemeinsame Dateien
-   - offene Fragen, jeweils mit deiner empfohlenen Antwort
-4. Erstelle den Branch `tickets/&lt;short-name&gt;` vom Basis-Branch.
-5. **Stopp. Warte auf mein OK und meine Antworten.**
-
-## Schritt 2: die Schleife, für jedes Ticket
-
-1. **Bauen** (Sub-Agent, der den Code schreibt):
-   - Test zuerst: ein fehlschlagender Test für ein kleines Verhalten, dann gerade so viel Code, dass er besteht. Wiederholen.
-     Nutze den Skill `tdd`, falls installiert.
-   - Ändere nur die Dateien, die für dieses Ticket geplant sind. Braucht es eine andere Datei, halt an und frag den Orchestrator.
-   - Bleib im Ticket. Keine Nebenbei-Refactorings. Nicht committen.
-   - Blockierende Frage (unklare Anforderung, zwei gültige Designs, Umfang muss wachsen)? Halt an und melde sie mit Optionen und einer Empfehlung. Rate nicht.
-   - Melde: geänderte Dateien, Testergebnisse, Zweifel.
-2. **Prüfen** (ein eigener Prüf-Sub-Agent, nie der Implementierer):
-   - Lies das Ticket und den Diff seiner Dateien. Nutze den Skill `code-review`, falls installiert.
-   - **Spec:** Tut es alles, was das Ticket verlangt, und nichts darüber hinaus?
-   - **Standards:** Hält es sich an die Regeln des Repos? Ist es einfach und klar?
-   - Melde Befunde, wichtigste zuerst. Behebe nichts.
-3. **Beheben:** Gib die Befunde an den Implementierer zurück. **Höchstens 2 Korrekturrunden**, dann frag mich.
-4. **Committen:** Führe die volle Testsuite aus. Ist sie grün, committe nur die Dateien dieses Tickets, mit einer Nachricht, die das Ticket nennt. Ist sie rot, schick es zurück zu Schritt 1.
-5. **Weiter:** Markiere das Ticket als erledigt (bei lokalen Dateien `Status: done` setzen), dann starte jedes Ticket, das jetzt frei ist.
-
-### Wann du mich fragen sollst
-
-- Ein blockiertes Ticket wartet; die anderen laufen weiter. Schick mir Fragen **in einem Stapel**:
-  Ticket, Frage, Optionen, deine Empfehlung.
-- Stopp alles und frag mich, wenn die Tests nach einem Versuch noch rot sind, ein Ticket die Prüfung zweimal nicht besteht oder zwei Tickets sich widersprechen.
-- Schick nach jedem Commit eine Statuszeile: erledigt, in Arbeit, blockiert.
-
-## Schritt 3: abschließen
-
-1. Führe die volle Suite und die Typprüfung ein letztes Mal aus.
-2. Prüfe den ganzen Branch gegen den Basis-Branch (Spec und Standards).
-3. Behebe, was du und ich vereinbaren.
-4. Melde eine Tabelle: Ticket, Tests, Prüfbefunde, Korrekturrunden, gestellte Fragen.
-   Nenne alles, was ein Folge-Ticket wert ist.
-5. Lass den Branch bereit, damit ich ihn prüfen und mergen kann.</code></pre>
   </article>
     </div>
   </div>
@@ -212,7 +130,8 @@ Muss: [MUSS]
 Darf nicht: [DARF NICHT]
 Fertig wenn: [FERTIG WENN]
 
-Zuerst: Stelle mir bis zu 5 Fragen zu allem, was fehlt oder unklar ist, und warte.
+Zuerst: Lies die Dateien, die du brauchst. Stelle mir dann bis zu 5 Fragen, nur zu dem, was der Code
+nicht verrät, und warte.
 
 Dann schreibe den Prompt:
 - Für einen Agenten, der sich an diesen Chat nicht erinnert: Gib ihm alles, was er braucht.
@@ -221,7 +140,7 @@ Dann schreibe den Prompt:
 - Nutze [ECKIGE KLAMMERN] für alles, was ich jedes Mal ausfüllen soll.
 - Maximal 40 Zeilen. Streiche alles, was der Agent sowieso täte.
 
-Zeige ihn in einem einzigen Codeblock, dann nenne 3 Wege, wie er schiefgehen könnte.</code></pre>
+Nenne 3 Wege, wie er schiefgehen könnte, verbessere den Prompt für jeden davon, dann zeige ihn in einem einzigen Codeblock.</code></pre>
   </article>
     </div>
     <div class="tip" style="margin-top:18px"><span class="t-ico">💡</span><p><strong>Tipp:</strong> Der Agent ist gut in Struktur, du kennst das Ziel. Lies immer den Prompt, den er schreibt: Hat er einen Fehler, wiederholt der Agent ihn jedes Mal.</p></div>

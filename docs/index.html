@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Agentic Dev Workflow: a beginner's map</title>
+<title>Talk first, code last: the agentic dev workflow</title>
+<meta name="description" content="Build software with an AI coding agent: grill, spec, tickets, test-first build, review. One worked example, a cheat sheet, and copy-paste prompts.">
+<meta property="og:title" content="Talk first, code last: the agentic dev workflow">
+<meta property="og:description" content="Build software with an AI coding agent: grill, spec, tickets, test-first build, review. One worked example, a cheat sheet, and copy-paste prompts.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,9 +18,10 @@
   <nav class="langs" aria-label="Language"><a href="index.html" lang="en" hreflang="en" title="English" aria-current="page">EN</a><a href="index.fr.html" lang="fr" hreflang="fr" title="Français">FR</a><a href="index.es.html" lang="es" hreflang="es" title="Español">ES</a><a href="index.de.html" lang="de" hreflang="de" title="Deutsch">DE</a><a href="index.pt-br.html" lang="pt-BR" hreflang="pt-BR" title="Português (Brasil)">PT</a><a href="index.zh.html" lang="zh-CN" hreflang="zh-CN" title="简体中文">中文</a></nav>
   <nav class="tabs" aria-label="Pages"><a href="index.html" aria-current="page">Guide</a><a href="prompts.html">Prompts</a></nav>
   <div class="wrap">
-    <div class="kicker">A beginner's map</div>
-    <h1>Build software <span class="accent">with</span> an AI agent,<br>one clear step at a time</h1>
-    <p class="lead">Six skills take you from a vague idea to working, tested, reviewed code. You stay in charge of every step.</p>
+    <div class="kicker">The agentic dev workflow</div>
+    <h1>Talk first, <span class="accent">code last.</span></h1>
+    <p class="lead">Five skills take your coding agent from a vague idea to working, tested, reviewed code. You stay in charge of every step.</p>
+    <p class="hurry">In a hurry? <a href="#cheatsheet">Jump to the cheat sheet ↓</a></p>
   </div>
 </header>
 
@@ -28,9 +34,11 @@
     <li><a href="#tickets"><span class="ico">🎟️</span><span class="lbl">3. Tickets</span></a></li>
     <li><a href="#implement"><span class="ico">🛠️</span><span class="lbl">4. Build + TDD</span></a></li>
     <li><a href="#review"><span class="ico">🔍</span><span class="lbl">5. Review</span></a></li>
-    <li><a href="#retro"><span class="ico">🪞</span><span class="lbl">6. Retro</span></a></li>
     <li class="side"><a href="#cheatsheet"><span class="ico">📋</span><span class="lbl">Cheat sheet</span></a></li>
+    <li class="side"><a href="#more"><span class="ico">➕</span><span class="lbl">Other skills</span></a></li>
+    <li class="side"><a href="#words"><span class="ico">📖</span><span class="lbl">Words</span></a></li>
   </ol>
+  <label class="ex-toggle"><input type="checkbox" id="hide-ex"> Hide examples</label>
 </nav>
 
 <main>
@@ -46,16 +54,22 @@
       </div>
     </div>
 
-    <div class="grid grid-2" style="margin-bottom:28px">
+    <div class="grid grid-3" style="margin-bottom:20px">
       <div class="card">
         <span class="big">🤖</span>
         <h3>What is a coding agent?</h3>
-        <p>An AI assistant that works <strong>inside your project folder</strong>. It can read your files, write code, and run commands, like a teammate sitting at your computer. Examples: Claude Code, Codex, Cursor.</p>
+        <p style="margin:0">An AI assistant that works <strong>inside your project folder</strong>. It can read your files, write code, and run commands, like a teammate sitting at your computer. Examples: Claude Code, Codex, Cursor, Hermes Agent.</p>
       </div>
       <div class="card">
         <span class="big">🧩</span>
         <h3>What is a skill?</h3>
-        <p>A <strong>recipe card</strong> the agent follows for one job. You start a skill by typing a slash and its name, like <code>/grill-with-docs</code>.</p>
+        <p style="margin:0">A <strong>recipe card</strong> the agent follows for one job. You start a skill by typing a slash and its name, like <code>/grill-with-docs</code>.</p>
+      </div>
+      <div class="card">
+        <span class="big">🧰</span>
+        <h3>What you need</h3>
+        <ul style="margin:0;padding-left:20px"><li>A coding agent, any of them</li><li>A project folder that uses <strong>git</strong> (the agent commits its work)</li><li>That's it. No GitHub account, no special editor.</li></ul>
+        <p class="small" style="margin:8px 0 0">A word you don't know? See <a href="#words">Words</a> at the end, or ask your agent.</p>
       </div>
     </div>
 
@@ -68,8 +82,8 @@
           <div>
             <h4>Install the skills <small>(once per computer)</small></h4>
             <p>Just ask your coding agent:</p>
-            <div class="term ask">Install Matt Pocock's skills (mattpocock-skills, from the official Claude plugins marketplace).</div>
-            <p class="small">Works with most coding agents. Source: github.com/mattpocock/skills</p>
+            <div class="term ask">Install Matt Pocock's skills from github.com/mattpocock/skills</div>
+            <p class="small">Skills don't show up in the slash menu? Restart your agent.</p>
           </div>
         </div>
         <div class="setup-step">
@@ -77,6 +91,7 @@
           <div>
             <h4>Give your agent a project guide: <code>/init</code></h4>
             <p>Most coding agents have an init command. The agent scans your project and writes a guide file (<code>CLAUDE.md</code> or <code>AGENTS.md</code>, depending on the agent): how to run, test and build it, and where things live. The agent reads it at the start of every session.</p>
+            <p class="small">New to this code yourself? The <a href="prompts.html#onboarding">Walk me through this repo</a> prompt gives you a map first.</p>
           </div>
         </div>
         <div class="setup-step">
@@ -84,28 +99,28 @@
           <div>
             <h4>Connect the skills: <code>/setup-matt-pocock-skills</code></h4>
             <p>Asks 2–3 questions, then adds an "Agent skills" section to your guide and writes small config files in <code>docs/agents/</code>.</p>
-            <p class="small">When it asks where tickets go, pick <strong>local files</strong>. No GitHub account needed.</p>
+            <p class="small">When it asks where tickets go, pick <strong>local files</strong>.</p>
+            <p class="small">Not found? Type the full name: <code>/mattpocock-skills:setup-matt-pocock-skills</code>. Same for every skill.</p>
           </div>
         </div>
       </div>
-      <p class="setup-done">✅ Done. Your project is ready for the 6 steps below.</p>
+      <p class="setup-done">✅ Done. Your project is ready for the 5 steps below.</p>
     </div>
 
-    <div class="card">
-      <h3>💡 Why follow a workflow at all?</h3>
-      <p>The #1 way AI coding goes wrong: <strong>The agent builds something, but not what you meant.</strong> The fix is to slow down at the start. Agree on the idea first, write it down, cut it into small pieces, and only then write code.</p>
-      <p style="margin:0">Think of building a house: 🗣️ talk with the architect → 📐 blueprint → 📋 work orders → 🧱 build, with checks along the way → 🔍 final inspection → 🪞 team debrief.</p>
-      <div class="flow-strip">
-        <span class="pill">🔥 Grill with docs</span><span class="arr">→</span>
-        <span class="pill">📄 Spec</span><span class="arr">→</span>
-        <span class="pill">🎟️ Tickets</span><span class="arr">→</span>
-        <span class="pill">🛠️ Build + TDD</span><span class="arr">→</span>
-        <span class="pill">🔍 Review</span><span class="arr">→</span>
-        <span class="pill">🪞 Retro</span>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>💡 Why follow a workflow at all?</h3>
+        <p>The #1 way AI coding goes wrong: <strong>the agent builds something, but not what you meant.</strong> The fix is to slow down at the start. Agree on the idea first, write it down, cut it into small pieces, and only then write code.</p>
+        <p style="margin:0">Think of building a house: 🗣️ talk with the architect → 📐 blueprint → 📋 work orders → 🧱 build, with checks along the way → 🔍 final inspection.</p>
+      </div>
+      <div class="card">
+        <h3>🩹 Small change? Skip ahead.</h3>
+        <p>A typo, a one-line fix, a color tweak: you don't need five steps. Just ask the agent, or type <code>/tdd</code> for a quick test-first fix.</p>
+        <p style="margin:0">Use the full workflow when there are <strong>choices to make</strong>, the change touches several files, or it takes more than one session.</p>
       </div>
     </div>
 
-    <p style="margin-top:24px;color:var(--muted)">📌 <strong>Our example all the way down:</strong> adding <strong>dark mode</strong> to a simple todo-list app.</p>
+    <p class="ex" style="margin-top:20px;color:var(--muted)">📌 <strong>Our example all the way down:</strong> someone keeps <strong>stealing lunches</strong> from the office fridge. We build a small fridge app to label your lunch, report a theft, and name the top suspects.</p>
   </div>
 </section>
 
@@ -128,28 +143,30 @@
         <ul><li>Describe your idea in one sentence</li><li>Answer each question (short answers are fine)</li><li>Say "I don't know" when you don't. The agent suggests an answer.</li></ul>
       </div>
       <div class="role claude"><span class="badge claude">Agent</span>
-        <ul><li>Asks questions in small rounds</li><li>Gives a recommended answer for each one</li><li>Keeps going until nothing is left unclear</li><li>Updates the glossary (<code>GLOSSARY.md</code>) and decision notes (<code>docs/adr/</code>)</li></ul>
+        <ul><li>Asks questions in small rounds</li><li>Gives a recommended answer for each one</li><li>Keeps going until nothing is left unclear</li><li>Updates the glossary (<code>GLOSSARY.md</code>) and notes big decisions</li></ul>
       </div>
     </div>
 
+    <div class="ex">
     <div class="example-label">Example</div>
     <div class="chat">
-      <div class="chat-bar"><i></i><i></i><i></i><span>Coding agent: todo-app</span></div>
-      <div class="msg you"><div class="who">You</div><div class="text">/grill-with-docs I want to add dark mode to my todo app</div></div>
+      <div class="chat-bar"><i></i><i></i><i></i><span>Coding agent: fridge-app</span></div>
+      <div class="msg you"><div class="who">You</div><div class="text">/grill-with-docs Someone keeps eating my lunch from the office fridge. I want an app to catch them.</div></div>
       <div class="msg claude"><div class="who">Agent</div><div class="text">
-        <p><strong>Q1:</strong> Should it follow the computer's own light/dark setting, or use a toggle button? <em>→ I recommend both: follow the computer by default, with a button to override.</em></p>
-        <p><strong>Q2:</strong> Should the app remember your choice after a reload? <em>→ Yes.</em></p>
+        <p><strong>Q1:</strong> Should theft reports be anonymous? <em>→ I recommend yes. Nobody wants a fridge war with their name on it.</em></p>
+        <p><strong>Q2:</strong> What if someone is accused but the yogurt was really theirs? <em>→ I recommend a "That was mine" button that cancels the report.</em></p>
       </div></div>
-      <div class="msg you"><div class="who">You</div><div class="text">Both, yes. And yes, remember it.</div></div>
-      <div class="msg claude"><div class="who">Agent</div><div class="text"><p>Next round. <strong>Q3:</strong> Where should the button go?…</p></div></div>
+      <div class="msg you"><div class="who">You</div><div class="text">Anonymous, yes. And add the button. Dave will need it.</div></div>
+      <div class="msg claude"><div class="who">Agent</div><div class="text"><p>Next round. <strong>Q3:</strong> Can a lunch expire? After two weeks, is it still a lunch, or a science project?…</p></div></div>
     </div>
 
     <div class="example-label">What it writes as it goes</div>
-    <div class="file"><span class="path">GLOSSARY.md</span><b>Theme</b>: the color set the app uses, "light" or "dark".
-<b>System theme</b>: the light/dark setting of the user's computer.</div>
+    <div class="file"><span class="path">GLOSSARY.md</span><b>Lunch</b>: a labeled food item, with an owner and a date.
+<b>Report</b>: an anonymous claim that someone took a lunch that wasn't theirs.</div>
+    </div>
     <p style="color:var(--muted);font-size:.95rem">Why it matters: next time, you and the agent use the <strong>same words</strong> for the same things. Fewer misunderstandings, shorter answers. (Plain <code>/grill-me</code> does the interview without the docs. Handy for non-code topics.)</p>
 
-    <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> this is the step people skip, and the one that matters most. Ten minutes of questions saves hours of fixing the wrong thing. Use it <em>every</em> time.</p></div>
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> this is the step people skip, and the one that matters most. Ten minutes of questions saves hours of fixing the wrong thing. Lost on a question? Open a new window and paste the <a href="prompts.html#eli5">Explain it simply</a> prompt.</p></div>
   </div>
 </section>
 
@@ -172,24 +189,27 @@
         <ul><li>Run it right after grilling, in the same chat</li><li>Confirm how the agent plans to test the feature</li><li>Read the spec. Fix anything wrong.</li></ul>
       </div>
       <div class="role claude"><span class="badge claude">Agent</span>
-        <ul><li>Looks through your code</li><li>Writes the spec to a file</li><li>Lists what is <em>out of scope</em> too</li></ul>
+        <ul><li>Looks through your code</li><li>Lists what is <em>out of scope</em></li></ul>
       </div>
     </div>
 
+    <div class="ex">
     <div class="example-label">Example: what the agent writes</div>
-    <div class="file"><span class="path">.scratch/dark-mode/spec.md</span><b>## Problem</b>
-The app is too bright at night.
+    <div class="file"><span class="path">.scratch/fridge-thief/spec.md</span><b>## Problem</b>
+Lunches keep disappearing from the office fridge. Nobody knows who.
 
 <b>## Solution</b>
-A dark theme that follows the computer setting, with a toggle button.
+Label your lunch. Report a theft, anonymously. A "Most wanted" board shows the top suspects.
 
 <b>## User stories</b>
-1. As a user, I want the app dark when my computer is in dark mode…
-2. As a user, I want a button to switch theme…
-3. As a user, I want my choice remembered after reload…
+1. As a coworker, I want to label my lunch with my name and the date…
+2. As a victim, I want to report a stolen lunch without giving my name…
+3. As an accused coworker, I want to say "that was mine"…
+4. As anyone, I want to see the "Most wanted" board…
 
 <b>## Out of scope</b>
-<span class="dim">Custom colors, scheduled dark mode at sunset.</span></div>
+<span class="dim">Fridge cameras, fingerprinting the yogurt.</span></div>
+    </div>
 
     <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> the spec is <strong>your</strong> document. If something is wrong, say so now. Fixing a sentence is much cheaper than fixing code.</p></div>
   </div>
@@ -231,13 +251,15 @@ A dark theme that follows the computer setting, with a toggle button.
       </div>
     </div>
 
-    <div class="example-label">Example: the tickets for dark mode</div>
+    <div class="ex">
+    <div class="example-label">Example: the tickets for the fridge app</div>
     <div class="tickets">
-      <div class="ticket"><div class="n">01</div><strong>Toggle button switches the theme</strong><div class="blk">Waits for: nothing, start now</div></div>
-      <div class="ticket"><div class="n">02</div><strong>Remember the choice after reload</strong><div class="blk">Waits for: 01</div></div>
-      <div class="ticket"><div class="n">03</div><strong>Follow the computer setting by default</strong><div class="blk">Waits for: 01</div></div>
+      <div class="ticket"><div class="n">01</div><strong>Label your lunch</strong><div class="blk">Waits for: nothing, start now</div></div>
+      <div class="ticket"><div class="n">02</div><strong>Report a stolen lunch, with a "That was mine" button</strong><div class="blk">Waits for: 01</div></div>
+      <div class="ticket"><div class="n">03</div><strong>"Most wanted" board</strong><div class="blk">Waits for: 02</div></div>
     </div>
-    <p style="color:var(--muted);font-size:.9rem">Saved as <code>.scratch/dark-mode/issues/01-toggle-button.md</code>, <code>02-…</code>, <code>03-…</code></p>
+    <p style="color:var(--muted);font-size:.9rem">Saved as <code>.scratch/fridge-thief/issues/01-label-lunch.md</code>, <code>02-…</code>, <code>03-…</code></p>
+    </div>
 
     <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> each ticket is sized to fit in <strong>one fresh agent session</strong>. Small tickets mean the agent stays focused and makes fewer mistakes.</p></div>
   </div>
@@ -269,32 +291,34 @@ A dark theme that follows the computer setting, with a toggle button.
 
     <div class="roles">
       <div class="role you"><span class="badge you">You</span>
-        <ul><li>Start a <strong>fresh session</strong> (<code>/clear</code> or a new chat)</li><li>Point the agent at one ticket</li><li>Agree on what gets tested</li><li>Watch, and step in if it goes off track</li></ul>
+        <ul><li>Start a <strong>fresh session</strong> (<code>/clear</code>, <code>/new</code>, or a new chat). Your files stay; the ticket tells the agent what it needs.</li><li>Point the agent at one ticket</li><li>Agree on what gets tested</li><li>Watch, and step in if it goes off track</li></ul>
       </div>
       <div class="role claude"><span class="badge claude">Agent</span>
-        <ul><li>Runs the red → green loop</li><li>Runs all the tests at the end</li><li>Calls the review (step 5) on its own</li><li>Saves the work (git commit)</li></ul>
+        <ul><li>Runs the red → green loop</li><li>Runs all the tests at the end</li><li>Calls the review (step 5) on its own</li><li>Then saves the work (git commit)</li></ul>
       </div>
     </div>
 
+    <div class="ex">
     <div class="example-label">Example</div>
     <div class="chat">
-      <div class="chat-bar"><i></i><i></i><i></i><span>Coding agent: todo-app (fresh session)</span></div>
-      <div class="msg you"><div class="who">You</div><div class="text">/clear<br>/implement .scratch/dark-mode/issues/01-toggle-button.md</div></div>
+      <div class="chat-bar"><i></i><i></i><i></i><span>Coding agent: fridge-app (fresh session)</span></div>
+      <div class="msg you"><div class="who">You</div><div class="text">/clear<br>/implement .scratch/fridge-thief/issues/01-label-lunch.md</div></div>
       <div class="msg claude"><div class="who">Agent</div><div class="text">
-        <p>🔴 Test: "clicking the theme button makes the page dark". Fails, as expected.</p>
-        <p>🟢 Added the button and dark colors. Test passes.</p>
-        <p>🔴 Test: "clicking twice goes back to light"… 🟢 passes.</p>
-        <p>✅ All tests pass. Committed. Running the review…</p>
+        <p>🔴 Test: "a labeled lunch shows its owner's name". Fails, as expected.</p>
+        <p>🟢 Added the label form and the lunch list. Test passes.</p>
+        <p>🔴 Test: "a lunch with no name can't be saved"… 🟢 passes.</p>
+        <p>✅ All tests pass. Running the review… then I'll commit.</p>
       </div></div>
     </div>
+    </div>
 
-    <div class="card" style="margin-bottom:18px">
+    <div class="card" style="margin-bottom:16px">
       <h3>⚡ Faster option: all tickets at once with <code>/implement-spec</code></h3>
-      <p>Instead of one ticket per session, the agent runs <strong>several helper agents in parallel</strong>. Each works in its own copy of the project, one ticket each, test-first. When a ticket is done, its work is merged into one shared branch. Tickets that were waiting start as soon as their blockers finish. At the end, one review of everything.</p>
+      <p>Instead of one ticket per session, the agent runs <strong>several helper agents in parallel</strong>. Each works in its own copy of the project, one ticket each, test-first. When a ticket is done, its work is merged back. Tickets that were waiting start as soon as their blockers finish. At the end, one review of everything.</p>
       <p style="margin:0;color:var(--muted);font-size:.95rem">Best when you have many tickets. Start with <code>/implement</code> one ticket at a time until the flow feels natural. It's easier to follow and to steer.</p>
     </div>
 
-    <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> want test-first on a quick fix outside this flow? Just type <code>/tdd</code>. It's the same loop.</p></div>
+    <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> session getting long, or the agent forgetting things? Type <code>/handoff</code>: the agent writes a short note for the next session. Then <code>/clear</code> and continue fresh.</p></div>
   </div>
 </section>
 
@@ -309,89 +333,30 @@ A dark theme that follows the computer setting, with a toggle button.
       </div>
     </div>
     <span class="cmd-chip cmd">/code-review</span>
-    <p class="oneliner">Two separate reviewers check the work. <strong>Is the code clean?</strong> And <strong>does it do what the ticket asked?</strong></p>
-    <p class="analogy">🏠 The final inspection. One inspector checks building codes, another checks it matches the blueprint.</p>
-
-    <div class="axes">
-      <div class="card">
-        <h3>📏 Standards</h3>
-        <p style="margin:0">Does the code follow the project's rules? Clear names? No copy-pasted code? Nothing overcomplicated?</p>
-      </div>
-      <div class="card">
-        <h3>🎯 Spec</h3>
-        <p style="margin:0">Does it do <strong>everything</strong> the ticket asked, and <strong>nothing more</strong>? Anything missing, wrong, or extra?</p>
-      </div>
-    </div>
+    <p class="oneliner">The agent checks the work: <strong>is the code clean</strong>, and <strong>does it do what the ticket asked</strong>, nothing more?</p>
+    <p class="analogy">🏠 The final inspection: built to code, and matches the blueprint.</p>
 
     <div class="roles">
       <div class="role you"><span class="badge you">You</span>
-        <ul><li>Read both reports</li><li>Decide what to fix: "fix 1 and 3, ignore 2"</li></ul>
+        <ul><li><strong>Try the feature yourself</strong></li><li>Read the report</li><li>Decide what to fix: "fix 1, ignore 2"</li></ul>
       </div>
       <div class="role claude"><span class="badge claude">Agent</span>
-        <ul><li>Runs both reviewers side by side</li><li>Reports findings, without fixing on its own</li><li>Fixes what you pick</li></ul>
+        <ul><li>Reports findings, without fixing on its own</li><li>Fixes what you pick</li></ul>
       </div>
     </div>
 
+    <div class="ex">
     <div class="example-label">Example: review report</div>
-    <div class="file"><b>## Standards</b>  (1 finding)
-- Possible unclear name: variable `t` should be `theme`.
-
-<b>## Spec</b>  (1 finding)
-- Extra: added a "sepia" theme, which the ticket didn't ask for.</div>
-
-    <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> <code>/implement</code> runs the review for you at the end. To run it yourself, give a starting point, like <code>/code-review main</code> (everything since the main branch).</p></div>
+    <div class="file"><b>## Review</b>  (2 findings)
+1. Unclear name: variable `l` should be `lunch`.
+2. Extra: added a "fridge camera" upload. The spec says it's out of scope.</div>
+    </div>
 
     <div class="loopback">
       <div class="big">🔁</div>
       <h3>Next ticket? Back to step 4.</h3>
-      <p style="margin:0">Fresh session → <code>/implement</code> ticket 02 → review → ticket 03… until all tickets are done. Then step 6. 🎉</p>
-      <p style="margin:10px 0 0;color:var(--muted)">⚡ Lots of tickets? <code>/implement-spec</code> runs this whole loop at once, in parallel, with one review at the end (see step 4).</p>
+      <p style="margin:0">Fresh session → <code>/implement</code> ticket 02 → review → ticket 03… until all tickets are done. 🎉</p>
     </div>
-  </div>
-</section>
-
-<!-- ================= 6. RETRO ================= -->
-<section id="retro">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="bubble">🪞</div>
-      <div>
-        <div class="step-num">Step 6</div>
-        <h2>Retro: learn from the session</h2>
-      </div>
-    </div>
-    <span class="cmd-chip cmd">/retro</span>
-    <p class="oneliner">The agent looks back at how the work went and suggests ways to <strong>improve its own setup</strong>, so the next feature goes smoother. It changes the setup, not the code.</p>
-    <p class="analogy">🏠 The team debrief after the house is done: "What slowed us down? What should we check automatically next time?"</p>
-
-    <div class="roles">
-      <div class="role you"><span class="badge you">You</span>
-        <ul><li>Run it when all tickets are done, or after a bumpy session</li><li>Pick which suggestions to apply</li></ul>
-      </div>
-      <div class="role claude"><span class="badge claude">Agent</span>
-        <ul><li>Re-reads the session</li><li>Finds what went slow or wrong</li><li>Suggests fixes, most important first</li></ul>
-      </div>
-    </div>
-
-    <h3>What it looks for</h3>
-    <div class="grid grid-3" style="margin-bottom:24px">
-      <div class="card"><span class="big">🧭</span><h3>Finding things</h3><p style="margin:0">Did the agent waste time looking for files? Add a pointer in the project guide.</p></div>
-      <div class="card"><span class="big">🚦</span><h3>Automatic checks</h3><p style="margin:0">Could a linter, a test or a pre-commit check have caught a mistake? Add it.</p></div>
-      <div class="card"><span class="big">📏</span><h3>Rules</h3><p style="margin:0">Did the review miss something? Add a rule to the coding standards, or remove a useless one.</p></div>
-    </div>
-
-    <div class="example-label">Example</div>
-    <div class="chat">
-      <div class="chat-bar"><i></i><i></i><i></i><span>Coding agent: todo-app</span></div>
-      <div class="msg you"><div class="who">You</div><div class="text">/retro</div></div>
-      <div class="msg claude"><div class="who">Agent</div><div class="text">
-        <p><strong>1. Automatic checks:</strong> I committed once with a failing test. Add a pre-commit check that runs the tests.</p>
-        <p><strong>2. Finding things:</strong> I searched 6 files for the color settings. Add one line to <code>AGENTS.md</code>: "Theme colors live in <code>styles/theme.css</code>".</p>
-      </div></div>
-      <div class="msg you"><div class="who">You</div><div class="text">Do both.</div></div>
-    </div>
-
-    <div class="tip"><span class="t-ico">💡</span><p><strong>Tip:</strong> each retro makes the agent a bit better <strong>at your project</strong>. Small fixes add up fast.</p></div>
   </div>
 </section>
 
@@ -406,20 +371,64 @@ A dark theme that follows the computer setting, with a toggle button.
       </div>
     </div>
     <table>
-      <thead><tr><th>Step</th><th>Type</th><th>What happens</th><th>Your job</th></tr></thead>
+      <thead><tr><th>Step</th><th>You type</th><th>What happens</th><th>Your job</th></tr></thead>
       <tbody>
-        <tr><td class="c">0 · Setup <small>(once)</small></td><td class="c"><span class="cmd">/init</span> then <span class="cmd">/setup-matt-pocock-skills</span></td><td>Writes the project guide (<code>CLAUDE.md</code> or <code>AGENTS.md</code>), then connects the skills. Pick "local files".</td><td>Answer 3 questions</td></tr>
+        <tr><td class="c">0 · Setup <small>(once)</small></td><td class="c"><span class="cmd">/init</span> then <span class="cmd">/setup-matt-pocock-skills</span></td><td>Writes the project guide (<code>CLAUDE.md</code> or <code>AGENTS.md</code>), then connects the skills. Pick "local files".</td><td>Answer 2–3 questions</td></tr>
         <tr><td class="c">1 · 🔥 Grill me</td><td class="c"><span class="cmd">/grill-with-docs</span> + idea</td><td>The agent interviews you until the idea is clear, and updates the glossary</td><td>Answer questions</td></tr>
         <tr><td class="c">2 · 📄 Spec</td><td class="c"><span class="cmd">/to-spec</span></td><td>Writes the plan to <code>spec.md</code></td><td>Read it, fix it</td></tr>
         <tr><td class="c">3 · 🎟️ Tickets</td><td class="c"><span class="cmd">/to-tickets</span></td><td>Cuts the spec into small, working slices</td><td>Approve the list</td></tr>
-        <tr><td class="c">4 · 🛠️ Build + TDD</td><td class="c"><span class="cmd">/clear</span> then <span class="cmd">/implement</span> ticket</td><td>Test first 🔴, then code 🟢, repeat. Commits.</td><td>Watch, steer</td></tr>
-        <tr><td class="c">5 · 🔍 Review</td><td class="c"><span class="cmd">/code-review</span> <small>(auto)</small></td><td>Two checks: clean code + matches the ticket</td><td>Pick what to fix</td></tr>
+        <tr><td class="c">4 · 🛠️ Build + TDD</td><td class="c"><span class="cmd">/implement</span> ticket</td><td>Test first 🔴, then code 🟢, repeat. Commits.</td><td>Watch, steer</td></tr>
+        <tr><td class="c">5 · 🔍 Review</td><td class="c"><span class="cmd">/code-review</span> <small>(auto)</small></td><td>Checks: clean code, matches the ticket</td><td>Try it, pick what to fix</td></tr>
         <tr><td class="c">🔁</td><td colspan="3">Repeat steps 4–5 for every ticket. Or run <span class="cmd">/implement-spec</span> to build them all in parallel.</td></tr>
-        <tr><td class="c">6 · 🪞 Retro</td><td class="c"><span class="cmd">/retro</span></td><td>Suggests fixes to the agent's setup so next time goes smoother</td><td>Pick what to apply</td></tr>
       </tbody>
     </table>
-    <p style="margin-top:14px;color:var(--muted);font-size:.9rem">Golden rule: <strong>talk first, code last.</strong> Small steps, fresh session per ticket, tests as proof, learn after each feature.</p>
+    <p style="margin-top:12px;color:var(--muted);font-size:.9rem">Golden rule: <strong>talk first, code last.</strong> Small steps, fresh session per ticket, tests as proof.</p>
     <button class="print-btn" onclick="window.print()">🖨️ Print the cheat sheet</button>
+  </div>
+</section>
+
+<!-- ================= OTHER SKILLS ================= -->
+<section id="more">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">➕</div>
+      <div>
+        <div class="step-num">Off the main path</div>
+        <h2>Other skills</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><h3><code>/ask-matt</code></h3><p style="margin:0">Lost? It tells you which skill fits your situation.</p></div>
+      <div class="card"><h3><code>/diagnosing-bugs</code></h3><p style="margin:0">A bug you can't explain: reproduce it first, then find the cause.</p></div>
+      <div class="card"><h3><code>/prototype</code></h3><p style="margin:0">Unsure about a design? Build a throwaway version first.</p></div>
+      <div class="card"><h3><code>/wait-what</code></h3><p style="margin:0">The agent's last answer made no sense? It explains it again, differently.</p></div>
+      <div class="card"><h3><code>/retro</code></h3><p style="margin:0">After a feature: the agent suggests changes to its own setup, so the next one goes smoother.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORDS ================= -->
+<section id="words">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📖</div>
+      <div>
+        <div class="step-num">One line each</div>
+        <h2>Words</h2>
+      </div>
+    </div>
+    <dl class="words">
+      <dt>Context</dt><dd>What the agent remembers in the current session. When it fills up, the agent gets worse.</dd>
+      <dt>Fresh session</dt><dd>A new chat with empty context. Your files don't change.</dd>
+      <dt>Project guide</dt><dd>A file (<code>AGENTS.md</code> or <code>CLAUDE.md</code>) the agent reads at the start of every session.</dd>
+      <dt>Spec</dt><dd>The written plan: what to build, and what not to build.</dd>
+      <dt>Out of scope</dt><dd>What you agreed <em>not</em> to build this time.</dd>
+      <dt>Ticket</dt><dd>One small piece of the spec that works on its own.</dd>
+      <dt>Test</dt><dd>A bit of code that checks another bit of code does what it should.</dd>
+      <dt>TDD</dt><dd>Test-driven development: write the test first, watch it fail, then write the code.</dd>
+      <dt>Commit</dt><dd>A saved snapshot of the project in git. You can always go back to it.</dd>
+    </dl>
+    <p class="small" style="margin-top:12px">Something else unclear? Ask your agent: "Explain [word] simply." Or use the <a href="prompts.html#eli5">Explain it simply</a> prompt.</p>
   </div>
 </section>
 
@@ -428,7 +437,6 @@ A dark theme that follows the computer setting, with a toggle button.
 <footer>
   Based on <a href="https://github.com/mattpocock/skills" style="color:var(--accent)">Matt Pocock's skills</a> for coding agents.
   Up to date with version 1.3.1 (October 2026).
-  In the slash menu, skills may show with a prefix, like <code>/mattpocock-skills:grill-with-docs</code>.
 </footer>
 
 <script src="app.js"></script>
