@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Agentic Dev Workflow: ready-to-use prompts</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <nav class="langs" aria-label="Language"><a href="prompts.html" lang="en" hreflang="en" title="English" aria-current="page">EN</a><a href="prompts.fr.html" lang="fr" hreflang="fr" title="Français">FR</a><a href="prompts.es.html" lang="es" hreflang="es" title="Español">ES</a><a href="prompts.de.html" lang="de" hreflang="de" title="Deutsch">DE</a><a href="prompts.pt-br.html" lang="pt-BR" hreflang="pt-BR" title="Português (Brasil)">PT</a><a href="prompts.zh.html" lang="zh-CN" hreflang="zh-CN" title="简体中文">中文</a></nav>
+  <nav class="tabs" aria-label="Pages"><a href="index.html">Guide</a><a href="prompts.html" aria-current="page">Prompts</a></nav>
+  <div class="wrap">
+    <div class="kicker">Copy and paste</div>
+    <h1>Ready-to-use <span class="accent">prompts</span></h1>
+    <p class="lead">Copy a prompt, fill in the blanks, and paste it into a fresh agent session.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= PROMPTS ================= -->
+<section id="prompts">
+  <div class="wrap">
+    <div class="grid grid-1">
+  <article class="card prompt-card">
+    <h3>🧒 Explain it simply (ELI5)</h3>
+    <p>Use it when a topic feels hard. The agent explains it in plain words, then checks that you understood.</p>
+    <p class="fill">Fill in: <code>[TOPIC]</code></p>
+    <pre class="prompt"><code>Explain [TOPIC] to a complete beginner, like I'm 5.
+- Max 150 words (not counting the questions). Short sentences. No jargon; if a term is unavoidable, define it in 5 words.
+- Start with one everyday analogy (kitchen, post office, etc.), then one sentence on where the analogy breaks.
+- Then one concrete example with real values.
+- End with: "The one thing to remember: ..." (one sentence).
+- Then ask me 2 questions to check I understood, and wait. Don't answer them yourself.
+  When I reply, correct each answer in 1–2 sentences.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>🖼️ Teach it with a diagram</h3>
+    <p>Use it when a topic, problem or workflow is hard to understand. The agent builds one HTML page with a diagram.</p>
+    <p class="fill">Fill in: <code>[TOPIC / PROBLEM / WORKFLOW]</code> <code>[AUDIENCE]</code></p>
+    <pre class="prompt"><code>Teach me [TOPIC / PROBLEM / WORKFLOW] as one self-contained HTML page.
+The goal is understanding, not decoration.
+
+First: if the topic or audience is ambiguous, ask me up to 3 questions and wait.
+
+Audience: [college grad | junior dev | non-technical].
+Explain the thing itself, in plain words, at that level.
+Define every term this audience may not know, the first time it appears,
+in under 8 words. Skip definitions for terms they already know.
+
+Page structure, in this order:
+1. Title, then a one-sentence answer: what it is, or what the problem is.
+2. Why it matters: one sentence on what goes wrong without it.
+3. The diagram (main part). Max 10 boxes, labels max 4 words.
+   - Number the steps 1, 2, 3 in reading order.
+   - One color per actor or component, with a small legend.
+     Decisions are diamonds; loops are arrows going back.
+   - Under the diagram, one plain sentence per numbered step: what happens and why.
+4. One worked example with real values, walked through the numbered steps.
+5. Common mistakes: max 3 bullets.
+6. "Remember": one sentence.
+
+Technical rules:
+- ONE file, inline &lt;style&gt;. No external assets, no CDN, no framework;
+  works offline from file://.
+- Lay out the diagram's boxes with CSS grid; keep arrows simple (CSS or small
+  SVG lines). Nothing may overlap, and no text may overflow its box.
+  If you can open the page in a browser, check this before finishing.
+- Under 600px wide, the diagram stacks top to bottom. Readable in print.
+- Colors as CSS variables in :root.
+- Short sentences. No filler. Nothing outside the structure above.
+
+Save as [topic-name].html.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>🗺️ Walk me through this repo</h3>
+    <p>Use it when you open a project you don't know yet. The agent reads the code (no edits) and gives you a map, one real example, and what to read first.</p>
+    <p class="fill">Fill in: <code>[AREA]</code></p>
+    <pre class="prompt"><code>Walk me through [AREA] of this repo. I am new here. Read only: don't edit anything.
+
+1. In 3 sentences: what this project does and who uses it.
+2. The stack: language, framework, and how to run it and its tests.
+3. The map: max 8 main folders or modules, one line each on what it owns.
+4. One real example: pick one common action (a click, a request, a command)
+   and follow it step by step through the code, with file paths.
+5. The top 3 gotchas: things that would surprise me before my first change.
+6. Read next: the 5 files I should read first, in order, with one line on why.
+
+Rules:
+- Plain words, short sentences. Define any term a junior dev may not know.
+- Point to real files (path:line). Don't guess: if you're not sure, say so.
+- Then ask me what I want to change, and wait.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>📦 Hand off to a fresh session</h3>
+    <p>Use it when the session gets long, the agent starts forgetting things, or a step is done. The agent writes a short note, then a new session reads it and continues.</p>
+    <p class="fill">Nothing to fill in. In the new session, say: <code>Read handoff.md and continue.</code></p>
+    <pre class="prompt"><code>We're stopping this session. Write a handoff note so a new agent, with no memory
+of this chat, can continue the work. Save it as handoff.md.
+
+Sections, in this order:
+1. Goal: what we're building, in 2 sentences.
+2. Decisions: what we chose, and why, one line each.
+   Include the options we rejected, so nobody reopens them.
+3. Done: what is finished and works (with file paths).
+4. Not done: what is left, in order, smallest next step first.
+5. Open questions: anything I still have to decide.
+6. Watch out: traps we hit, and things that looked right but were wrong.
+7. Read first: the files the new agent should open, with one line on why.
+
+Rules:
+- Max 60 lines. Facts only, no story of the chat.
+- Point to files and commits, don't paste code.
+- Don't change any code now.
+- Show me the note when done, so I can fix it before we switch.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>🎟️ Build tickets in parallel</h3>
+    <p>Use it to build many tickets at once. One orchestrator agent plans, reviews and commits, and helper agents write the code.</p>
+    <p class="fill">Fill in: <code>Tickets</code> <code>Base branch</code> <code>Max parallel tickets</code></p>
+    <pre class="prompt"><code>You are the **orchestrator** for building a set of tickets.
+You plan, hand out work, review and commit. Helper sub-agents write the code.
+
+## Inputs (fill these in)
+
+- **Tickets:** &lt;path to a folder or spec, issue numbers/URLs, or a pasted list&gt;
+- **Base branch:** &lt;e.g. main&gt;
+- **Max parallel tickets:** &lt;default 3&gt;
+
+## Ground rules
+
+- I make the decisions. Never guess on a product or design question: ask me.
+- Follow the repo's `AGENTS.md` / `CLAUDE.md`, coding standards and commit conventions.
+- Give helpers **pointers**, not copies: ticket path or URL, spec path, relevant files.
+- Don't push, open PRs or close tickets unless I say so.
+- Everyone works in the same folder, on one branch. Two tickets run at the same time
+  only if they touch **different files**. Otherwise, run them one after the other.
+- If you can't run sub-agents in parallel, run the tickets one at a time.
+
+## Step 1: plan, then wait for my OK
+
+1. Read every ticket, its spec, and the repo's glossary and coding standards if they exist.
+2. Find the commands for typecheck, lint, one test file, and the full test suite.
+3. Show me:
+   - a table: ticket, blocked by (mark guesses "inferred"), files it will probably touch
+   - the first batch: tickets with no open blockers and no shared files
+   - open questions, each with your recommended answer
+4. Create the branch `tickets/&lt;short-name&gt;` from the base branch.
+5. **Stop. Wait for my OK and my answers.**
+
+## Step 2: the loop, for each ticket
+
+1. **Build** (implementer sub-agent):
+   - Test first: one failing test for one small behavior, then just enough code to pass. Repeat.
+     Use the `tdd` skill if installed.
+   - Only edit the files planned for this ticket. If it needs another file, stop and ask the orchestrator.
+   - Stay inside the ticket. No drive-by refactors. Don't commit.
+   - Blocking question (unclear requirement, two valid designs, scope must grow)? Stop and report
+     it with options and a recommendation. Don't guess.
+   - Report: files changed, test results, doubts.
+2. **Review** (a separate reviewer sub-agent, never the implementer):
+   - Read the ticket and the diff of its files. Use the `code-review` skill if installed.
+   - **Spec:** does it do everything the ticket asks, and nothing more?
+   - **Standards:** does it follow the repo's rules? Is it simple and clear?
+   - Report findings, most important first. Don't fix anything.
+3. **Fix:** send findings back to the implementer. **2 fix rounds at most**, then ask me.
+4. **Commit:** run the full test suite. If green, commit only this ticket's files,
+   with a message that names the ticket. If red, send it back to step 1.
+5. **Next:** mark the ticket done (for local files, set `Status: done`),
+   then start any ticket that is now unblocked.
+
+### When to ask me
+
+- A blocked ticket waits; the others keep going. Send me questions **in one batch**:
+  ticket, question, options, your recommendation.
+- Stop everything and ask me if the tests stay red after one retry, a ticket fails
+  review twice, or two tickets contradict each other.
+- After each commit, send a one-line status: done, in progress, blocked.
+
+## Step 3: finish
+
+1. Run the full suite and typecheck one last time.
+2. Review the whole branch against the base branch (Spec and Standards).
+3. Fix what you and I agree to fix.
+4. Report a table: ticket, tests, review findings, fix rounds, questions asked.
+   List anything worth a follow-up ticket.
+5. Leave the branch ready for me to review and merge.</code></pre>
+  </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WRITE A PROMPT ================= -->
+<section id="write-prompt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">✍️</div>
+      <div>
+        <h2>Let the agent write the prompt</h2>
+      </div>
+    </div>
+    <p class="oneliner">For a big task, don't write the prompt yourself. <strong>Give the agent the pieces</strong> (goal, context, rules, when it's done) and ask it to write the real prompt.</p>
+    <p class="analogy">📝 Like telling a friend what you need, and they write the email for you. You still read it before you hit send.</p>
+    <div class="grid grid-1">
+  <article class="card prompt-card">
+    <h3>✍️ Write a prompt for me</h3>
+    <p>Use it when a task is big or you'll reuse the prompt. Read the result, fix it, then paste it into a fresh session.</p>
+    <p class="fill">Fill in: <code>[GOAL]</code> <code>[CONTEXT]</code> <code>[MUST]</code> <code>[MUST NOT]</code> <code>[DONE WHEN]</code></p>
+    <pre class="prompt"><code>Write a prompt for a coding agent. Don't do the task yourself.
+
+Goal: [GOAL]
+Context: [CONTEXT: project, files, who it's for]
+Must: [MUST]
+Must not: [MUST NOT]
+Done when: [DONE WHEN]
+
+First: ask me up to 5 questions about anything missing or unclear, and wait.
+
+Then write the prompt:
+- For an agent with no memory of this chat: put in all it needs.
+- Clear steps, in order. Short sentences, plain words.
+- Say where to stop and ask me, and what to report at the end.
+- Use [BRACKETS] for anything I should fill in each time.
+- Max 40 lines. Cut anything the agent would do anyway.
+
+Show it in one code block, then list 3 ways it could go wrong.</code></pre>
+  </article>
+    </div>
+    <div class="tip" style="margin-top:18px"><span class="t-ico">💡</span><p><strong>Tip:</strong> the agent is good at structure, you know the goal. Always read the prompt it writes: if it has a mistake, the agent will repeat it every time.</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Based on <a href="https://github.com/mattpocock/skills" style="color:var(--accent)">Matt Pocock's skills</a> for coding agents.
+  Up to date with version 1.3.1 (October 2026).
+  In the slash menu, skills may show with a prefix, like <code>/mattpocock-skills:grill-with-docs</code>.
+</footer>
+<script src="copy.js"></script>
+</body>
+</html>

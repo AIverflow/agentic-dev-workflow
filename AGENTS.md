@@ -3,7 +3,7 @@
 This repo is a small, dependency-free teaching resource: an explainer page for the
 agentic dev workflow (grill → spec → tickets → implement/TDD → review → retro),
 in six languages, plus a
-meta-prompt that generates a parallel-ticket orchestrator prompt. There is no
+reusable prompt that builds a set of tickets in parallel. There is no
 build system, no package manager, and no test suite.
 
 ## Layout
@@ -11,17 +11,35 @@ build system, no package manager, and no test suite.
 - `index.html` (EN), `index.fr.html`, `index.es.html`, `index.de.html`,
   `index.pt-br.html`, `index.zh.html` — one page per language, same structure and
   section ids. Any content change must be mirrored in all six.
-- `style.css` — all styles, shared by every page. `app.js` — the scroll-spy, shared.
+- `prompts.html` (EN), `prompts.fr.html`, `prompts.es.html`, `prompts.de.html`,
+  `prompts.pt-br.html`, `prompts.zh.html` — the Prompts page, one per language.
+  Every page (guide and prompts) has a `nav.tabs` bar, **Guide | Prompts**, right
+  after `nav.langs`. On the prompts pages, `nav.langs` links to the `prompts*.html`
+  pages. Each prompt is an `<article class="card prompt-card">` with a
+  `<pre class="prompt"><code>` block (HTML-escaped). The prompt text is translated
+  too; keep it in sync with its source in `prompt/` (and `parallel-tickets-prompt.md`).
+  Adding or editing a prompt means updating all six prompts pages.
+- `prompt/` — the English source text of the prompts shown on the Prompts pages
+  (`eli5-explain.md`, `teach-diagram.md`, `onboarding.md`, `handoff.md`,
+  `write-a-prompt.md`). Not served as pages.
+- `.ticket/` — the spec and tickets used to build the Prompts pages (`00-spec.md` is
+  the layout reference for a prompts page). Not part of the site.
+- `style.css` — all styles, shared by every page. `app.js` — the scroll-spy (guide pages). `copy.js` — the
+  Copy buttons on prompt blocks (prompts pages); its labels are keyed by `<html lang>`.
 - `README.md` — project description and live-site link (GitHub Pages, served from
   `main` at the repo root).
 - Each page's hero has a `nav.langs` picker listing all six pages, with
-  `aria-current="page"` on its own language. Adding a language means adding a page
-  and adding its link to the picker in every page, plus the README table.
+  `aria-current="page"` on its own language. Adding a language means adding a guide page
+  and a prompts page, adding its link to the picker in every page (guide pickers
+  point to `index*.html`, prompts pickers to `prompts*.html`), a `copy.js` label
+  entry, and a README table row.
 - Translation rules: never translate skill names or commands (`/grill-with-docs`,
   "Grill me", `/implement-spec`…). Address the reader as: FR "vous", ES "tú",
   DE "du", PT-BR "você", ZH "你".
-- `parallel-tickets-meta-prompt.md` — a *prompt to write a prompt*. It is pasted
-  into a fresh coding-agent session; nothing here executes it.
+- `parallel-tickets-prompt.md` — a reusable orchestrator prompt (parallel tickets,
+  per-ticket build → review → fix → merge, ask-the-human on blockers). It is
+  pasted into a coding-agent session in a *target* project; nothing here executes it.
+  Keep it agent- and tracker-neutral.
 
 ## Viewing the page
 
@@ -45,7 +63,7 @@ There is no build step. Edit a page or `style.css` and reload.
   `#implement`, `#review`, `#retro`, `#cheatsheet`. Adding a section means adding a
   `<section id="…">` in `<main>` *and* a matching `<li>` in `nav.map`, or the
   scroll-spy breaks.
-- The scroll-spy is the only JS: an `IntersectionObserver` keyed on `main section`
+- Only two small scripts: `copy.js`, and the scroll-spy (`app.js`), an `IntersectionObserver` keyed on `main section`
   ids mapping to `.map a` hrefs. Keep ids and hrefs in sync.
 - Prose is deliberately beginner-facing: plain words, short sentences, a worked
   "dark mode" example throughout. Match that tone; don't add jargon.
@@ -63,7 +81,7 @@ There is no build step. Edit a page or `style.css` and reload.
   other content.
 - The sticky nav uses `scroll-padding-top` (130px desktop, 160px under 720px);
   changing the nav height means updating both.
-- `parallel-tickets-meta-prompt.md` describes paths like `.scratch/<slug>/issues/`,
+- `parallel-tickets-prompt.md` describes paths like `.scratch/<slug>/issues/`,
   `docs/agents/`, `GLOSSARY.md` that belong to the *target* project, not this repo.
   Don't create them here.
 

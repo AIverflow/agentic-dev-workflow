@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O fluxo de desenvolvimento agêntico: prompts prontos para usar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <nav class="langs" aria-label="Language"><a href="prompts.html" lang="en" hreflang="en" title="English">EN</a><a href="prompts.fr.html" lang="fr" hreflang="fr" title="Français">FR</a><a href="prompts.es.html" lang="es" hreflang="es" title="Español">ES</a><a href="prompts.de.html" lang="de" hreflang="de" title="Deutsch">DE</a><a href="prompts.pt-br.html" lang="pt-BR" hreflang="pt-BR" title="Português (Brasil)" aria-current="page">PT</a><a href="prompts.zh.html" lang="zh-CN" hreflang="zh-CN" title="简体中文">中文</a></nav>
+  <nav class="tabs" aria-label="Páginas"><a href="index.pt-br.html">Guia</a><a href="prompts.pt-br.html" aria-current="page">Prompts</a></nav>
+  <div class="wrap">
+    <div class="kicker">Copie e cole</div>
+    <h1>Prompts <span class="accent">prontos</span> para usar</h1>
+    <p class="lead">Copie um prompt, preencha os espaços em branco e cole-o em uma sessão nova do agente.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= PROMPTS ================= -->
+<section id="prompts">
+  <div class="wrap">
+    <div class="grid grid-1">
+  <article class="card prompt-card">
+    <h3>🧒 Explique de forma simples (ELI5)</h3>
+    <p>Use quando um tema parece difícil. O agente explica em palavras simples e depois verifica se você entendeu.</p>
+    <p class="fill">Preencha: <code>[TEMA]</code></p>
+    <pre class="prompt"><code>Explique [TEMA] para um iniciante completo, como se eu tivesse 5 anos.
+- No máximo 150 palavras (sem contar as perguntas). Frases curtas. Sem jargão; se um termo for inevitável, defina-o em 5 palavras.
+- Comece com uma analogia do dia a dia (cozinha, correio, etc.), depois uma frase sobre onde a analogia deixa de funcionar.
+- Depois, um exemplo concreto com valores reais.
+- Termine com: "A coisa mais importante para lembrar: ..." (uma frase).
+- Depois me faça 2 perguntas para checar se eu entendi, e espere. Não responda você mesmo.
+  Quando eu responder, corrija cada resposta em 1–2 frases.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>🖼️ Ensine com um diagrama</h3>
+    <p>Use quando um tema, problema ou fluxo é difícil de entender. O agente monta uma única página HTML com um diagrama.</p>
+    <p class="fill">Preencha: <code>[TEMA / PROBLEMA / FLUXO]</code> <code>[PÚBLICO]</code></p>
+    <pre class="prompt"><code>Me ensine [TEMA / PROBLEMA / FLUXO] como uma única página HTML autocontida.
+O objetivo é entender, não enfeitar.
+
+Primeiro: se o tema ou o público não estiver claro, faça até 3 perguntas e espere.
+
+Público: [recém-formado | dev júnior | não técnico].
+Explique a coisa em si, em palavras simples, nesse nível.
+Defina todo termo que esse público pode não conhecer, na primeira vez em que aparecer,
+em menos de 8 palavras. Pule as definições de termos que ele já conhece.
+
+Estrutura da página, nesta ordem:
+1. Título, depois uma frase com a resposta: o que é, ou qual é o problema.
+2. Por que importa: uma frase sobre o que dá errado sem isso.
+3. O diagrama (parte principal). No máximo 10 caixas, rótulos com no máximo 4 palavras.
+   - Numere os passos 1, 2, 3 na ordem de leitura.
+   - Uma cor por ator ou componente, com uma legenda pequena.
+     Decisões são losangos; laços são setas voltando.
+   - Abaixo do diagrama, uma frase simples por passo numerado: o que acontece e por quê.
+4. Um exemplo resolvido com valores reais, percorrendo os passos numerados.
+5. Erros comuns: no máximo 3 tópicos.
+6. "Lembre-se": uma frase.
+
+Regras técnicas:
+- UM arquivo, com &lt;style&gt; inline. Sem arquivos externos, sem CDN, sem framework;
+  funciona offline a partir de file://.
+- Organize as caixas do diagrama com CSS grid; mantenha as setas simples (CSS ou linhas SVG pequenas). Nada pode se sobrepor, e nenhum texto pode vazar da sua caixa.
+  Se conseguir abrir a página em um navegador, confira isso antes de terminar.
+- Abaixo de 600px de largura, o diagrama empilha de cima para baixo. Legível na impressão.
+- Cores como variáveis CSS em :root.
+- Frases curtas. Sem enrolação. Nada fora da estrutura acima.
+
+Salve como [nome-do-tema].html.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>🗺️ Me guie por este repositório</h3>
+    <p>Use quando abrir um projeto que você não conhece. O agente lê o código (sem editar) e mostra um mapa, um exemplo real e o que ler primeiro.</p>
+    <p class="fill">Preencha: <code>[ÁREA]</code></p>
+    <pre class="prompt"><code>Me guie por [ÁREA] deste repositório. Sou novo aqui. Somente leitura: não edite nada.
+
+1. Em 3 frases: o que este projeto faz e quem o usa.
+2. As tecnologias: linguagem, framework, e como rodar o projeto e os testes dele.
+3. O mapa: no máximo 8 pastas ou módulos principais, uma linha sobre o que cada um é responsável.
+4. Um exemplo real: escolha uma ação comum (um clique, uma requisição, um comando)
+   e siga-a passo a passo pelo código, com os caminhos dos arquivos.
+5. As 3 armadilhas principais: coisas que me pegariam de surpresa antes da minha primeira mudança.
+6. Próxima leitura: os 5 arquivos que eu devo ler primeiro, em ordem, com uma linha sobre o porquê.
+
+Regras:
+- Palavras simples, frases curtas. Defina qualquer termo que um dev júnior talvez não conheça.
+- Aponte arquivos reais (path:line). Não chute: se não tiver certeza, diga isso.
+- Depois me pergunte o que eu quero mudar, e espere.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>📦 Passe o trabalho para uma sessão nova</h3>
+    <p>Use quando a sessão fica longa, o agente começa a esquecer as coisas, ou um passo termina. O agente escreve uma nota curta, depois uma sessão nova lê a nota e continua.</p>
+    <p class="fill">Nada para preencher. Na nova sessão, diga: <code>Leia handoff.md e continue.</code></p>
+    <pre class="prompt"><code>Estamos encerrando esta sessão. Escreva uma nota de passagem para que um novo agente, sem memória
+desta conversa, possa continuar o trabalho. Salve como handoff.md.
+
+Seções, nesta ordem:
+1. Objetivo: o que estamos construindo, em 2 frases.
+2. Decisões: o que escolhemos e por quê, uma linha cada.
+   Inclua as opções que rejeitamos, para que ninguém volte a discuti-las.
+3. Feito: o que está pronto e funciona (com os caminhos dos arquivos).
+4. Falta fazer: o que resta, em ordem, com o menor próximo passo primeiro.
+5. Perguntas em aberto: tudo o que eu ainda tenho que decidir.
+6. Cuidado: armadilhas em que caímos, e coisas que pareciam certas mas estavam erradas.
+7. Leia primeiro: os arquivos que o novo agente deve abrir, com uma linha sobre o porquê.
+
+Regras:
+- No máximo 60 linhas. Só fatos, sem contar a história da conversa.
+- Aponte arquivos e commits, não cole código.
+- Não mude nenhum código agora.
+- Me mostre a nota quando terminar, para eu corrigir antes de trocarmos de sessão.</code></pre>
+  </article>
+  <article class="card prompt-card">
+    <h3>🎟️ Crie tickets em paralelo</h3>
+    <p>Use para criar muitos tickets de uma vez. Um agente orquestrador planeja, revisa e faz commit, e agentes auxiliares escrevem o código.</p>
+    <p class="fill">Preencha: <code>Tickets</code> <code>Branch base</code> <code>Máximo de tickets em paralelo</code></p>
+    <pre class="prompt"><code>Você é o **orquestrador** para construir um conjunto de tickets.
+Você planeja, distribui o trabalho, revisa e faz commit. Sub-agentes auxiliares escrevem o código.
+
+## Entradas (preencha)
+
+- **Tickets:** &lt;caminho para uma pasta ou spec, números/URLs de issues, ou uma lista colada&gt;
+- **Branch base:** &lt;ex.: main&gt;
+- **Máximo de tickets em paralelo:** &lt;padrão 3&gt;
+
+## Regras básicas
+
+- Eu sou quem decide. Nunca chute uma questão de produto ou de design: me pergunte.
+- Siga o `AGENTS.md` / `CLAUDE.md` do repositório, os padrões de código e as convenções de commit.
+- Dê aos auxiliares **ponteiros**, não cópias: caminho ou URL do ticket, caminho da spec, arquivos relevantes.
+- Não faça push, não abra PRs e não feche tickets sem que eu peça.
+- Todos trabalham na mesma pasta, em uma só branch. Dois tickets rodam ao mesmo tempo só se mexerem em **arquivos diferentes**. Caso contrário, rode-os um depois do outro.
+- Se não puder rodar sub-agentes em paralelo, rode os tickets um de cada vez.
+
+## Passo 1: planejar, depois esperar meu OK
+
+1. Leia cada ticket, a spec dele, e o glossário e os padrões de código do repositório, se existirem.
+2. Encontre os comandos para checagem de tipos, lint, um arquivo de teste e a suíte completa de testes.
+3. Me mostre:
+   - uma tabela: ticket, bloqueado por (marque palpites como "inferido"), arquivos que provavelmente vai tocar
+   - o primeiro lote: tickets sem bloqueios abertos e sem arquivos em comum
+   - perguntas em aberto, cada uma com a sua resposta recomendada
+4. Crie a branch `tickets/&lt;short-name&gt;` a partir da branch base.
+5. **Pare. Espere meu OK e minhas respostas.**
+
+## Passo 2: o ciclo, para cada ticket
+
+1. **Construir** (sub-agente implementador):
+   - Teste primeiro: um teste que falha para um comportamento pequeno, depois só o código necessário para passar. Repita.
+     Use a skill `tdd` se estiver instalada.
+   - Edite só os arquivos planejados para este ticket. Se precisar de outro arquivo, pare e pergunte ao orquestrador.
+   - Fique dentro do ticket. Nada de refatorações extras. Não faça commit.
+   - Pergunta que bloqueia (requisito pouco claro, dois designs válidos, escopo que precisa crescer)? Pare, reporte com as opções e uma recomendação. Não chute.
+   - Reporte: arquivos alterados, resultados dos testes, dúvidas.
+2. **Revisar** (um sub-agente revisor separado, nunca o implementador):
+   - Leia o ticket e o diff dos arquivos dele. Use a skill `code-review` se estiver instalada.
+   - **Spec:** faz tudo o que o ticket pede, e nada além disso?
+   - **Standards:** segue as regras do repositório? É simples e claro?
+   - Reporte os achados, do mais importante para o menos. Não corrija nada.
+3. **Corrigir:** envie os achados de volta ao implementador. **No máximo 2 rodadas** de correção, depois me pergunte.
+4. **Commit:** rode a suíte completa de testes. Se passar, faça commit só dos arquivos deste ticket, com uma mensagem que cite o ticket. Se falhar, volte ao passo 1.
+5. **Próximo:** marque o ticket como concluído (para arquivos locais, defina `Status: done`), depois comece qualquer ticket que agora esteja desbloqueado.
+
+### Quando me perguntar
+
+- Um ticket bloqueado espera; os outros continuam. Me envie as perguntas **em um só lote**: ticket, pergunta, opções e sua recomendação.
+- Pare tudo e me pergunte se os testes continuarem falhando depois de uma nova tentativa, se um ticket falhar na revisão duas vezes, ou se dois tickets se contradizerem.
+- Depois de cada commit, me envie uma linha de status: concluído, em andamento ou bloqueado.
+
+## Passo 3: finalizar
+
+1. Rode a suíte completa e a checagem de tipos mais uma última vez.
+2. Revise a branch inteira contra a branch base (Spec e Standards).
+3. Corrija o que você e eu concordarmos em corrigir.
+4. Reporte em uma tabela: ticket, testes, achados da revisão, rodadas de correção, perguntas feitas.
+   Liste o que vale um ticket de acompanhamento.
+5. Deixe a branch pronta para eu revisar e fazer merge.</code></pre>
+  </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WRITE A PROMPT ================= -->
+<section id="write-prompt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">✍️</div>
+      <div>
+        <h2>Deixe o agente escrever o prompt</h2>
+      </div>
+    </div>
+    <p class="oneliner">Para uma tarefa grande, não escreva o prompt você mesmo. <strong>Dê as peças ao agente</strong> (objetivo, contexto, regras, quando está pronto) e peça para ele escrever o prompt de verdade.</p>
+    <p class="analogy">📝 Como contar a um amigo o que você precisa, e ele escreve o e-mail para você. Você ainda lê antes de enviar.</p>
+    <div class="grid grid-1">
+  <article class="card prompt-card">
+    <h3>✍️ Escreva um prompt para mim</h3>
+    <p>Use quando a tarefa for grande ou você for reutilizar o prompt. Leia o resultado, corrija e cole em uma sessão nova.</p>
+    <p class="fill">Preencha: <code>[OBJETIVO]</code> <code>[CONTEXTO]</code> <code>[DEVE FAZER]</code> <code>[NÃO DEVE FAZER]</code> <code>[PRONTO QUANDO]</code></p>
+    <pre class="prompt"><code>Escreva um prompt para um agente de código. Não faça a tarefa você mesmo.
+
+Objetivo: [OBJETIVO]
+Contexto: [CONTEXTO: projeto, arquivos, para quem é]
+Deve fazer: [DEVE FAZER]
+Não deve fazer: [NÃO DEVE FAZER]
+Pronto quando: [PRONTO QUANDO]
+
+Primeiro: me faça até 5 perguntas sobre o que estiver faltando ou não estiver claro, e espere.
+
+Depois, escreva o prompt:
+- Para um agente sem memória desta conversa: coloque tudo o que ele precisa.
+- Passos claros, em ordem. Frases curtas, palavras simples.
+- Diga onde parar para me perguntar, e o que me reportar no fim.
+- Use [COLCHETES] para tudo o que eu devo preencher a cada vez.
+- No máximo 40 linhas. Corte tudo o que o agente faria de qualquer jeito.
+
+Mostre em um único bloco de código, depois liste 3 formas como ele pode dar errado.</code></pre>
+  </article>
+    </div>
+    <div class="tip" style="margin-top:18px"><span class="t-ico">💡</span><p><strong>Dica:</strong> o agente é bom em estrutura, e você conhece o objetivo. Sempre leia o prompt que ele escreve: se tiver um erro, o agente vai repetir esse erro toda vez.</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Baseado nas <a href="https://github.com/mattpocock/skills" style="color:var(--accent)">skills do Matt Pocock</a> para agentes de código.
+  Atualizado para a versão 1.3.1 (outubro de 2026).
+  No menu de comandos, as skills podem aparecer com um prefixo, por exemplo <code>/mattpocock-skills:grill-with-docs</code>.
+</footer>
+<script src="copy.js"></script>
+</body>
+</html>
