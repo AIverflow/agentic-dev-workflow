@@ -2,19 +2,24 @@
 
 This repo is a small, dependency-free teaching resource: an explainer page for the
 agentic dev workflow (grill → spec → tickets → implement/TDD → review → retro),
-in English and French, plus a
+in six languages, plus a
 meta-prompt that generates a parallel-ticket orchestrator prompt. There is no
 build system, no package manager, and no test suite.
 
 ## Layout
 
-- `index.html` — the English page. One self-contained file: inline `<style>`, inline
-  `<script>`, no external assets, no CDN links, no framework.
-- `index.fr.html` — the French page. Same structure and an identical `<style>` block;
-  any change to one page must be mirrored in the other. A `.lang-switch` link in
-  the hero points from each page to the other.
-  French copy: use "vous", and never translate skill names or commands
-  (`/grill-with-docs`, "Grill me", `/implement-spec`…).
+- `index.html` (EN), `index.fr.html`, `index.es.html`, `index.de.html`,
+  `index.pt-br.html`, `index.zh.html` — one page per language, same structure and
+  section ids. Any content change must be mirrored in all six.
+- `style.css` — all styles, shared by every page. `app.js` — the scroll-spy, shared.
+- `README.md` — project description and live-site link (GitHub Pages, served from
+  `main` at the repo root).
+- Each page's hero has a `nav.langs` picker listing all six pages, with
+  `aria-current="page"` on its own language. Adding a language means adding a page
+  and adding its link to the picker in every page, plus the README table.
+- Translation rules: never translate skill names or commands (`/grill-with-docs`,
+  "Grill me", `/implement-spec`…). Address the reader as: FR "vous", ES "tú",
+  DE "du", PT-BR "você", ZH "你".
 - `parallel-tickets-meta-prompt.md` — a *prompt to write a prompt*. It is pasted
   into a fresh coding-agent session; nothing here executes it.
 
@@ -25,12 +30,12 @@ Open the file directly, or serve the folder:
     python3 -m http.server 8000
     # then browse http://localhost:8000/index.html
 
-There is no build step. Edit `index.html` and reload.
+There is no build step. Edit a page or `style.css` and reload.
 
-## Conventions (observed in index.html)
+## Conventions
 
-- Single file, zero dependencies. Do not add a bundler, framework, or external
-  asset — the page is meant to work offline from a `file://` open.
+- Zero dependencies. Do not add a bundler, framework, CDN link, or external
+  asset; the pages must keep working offline from a `file://` open.
 - All colors are CSS custom properties declared in `:root` (`--accent`, `--ink`,
   `--line`, `--card`, `--bg`, …). Reuse those variables; never hard-code a hex
   value in a rule.

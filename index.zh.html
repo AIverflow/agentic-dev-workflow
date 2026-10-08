@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能体开发工作流：新手指南</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <nav class="langs" aria-label="Language"><a href="index.html" lang="en" hreflang="en" title="English">EN</a><a href="index.fr.html" lang="fr" hreflang="fr" title="Français">FR</a><a href="index.es.html" lang="es" hreflang="es" title="Español">ES</a><a href="index.de.html" lang="de" hreflang="de" title="Deutsch">DE</a><a href="index.pt-br.html" lang="pt-BR" hreflang="pt-BR" title="Português (Brasil)">PT</a><a href="index.zh.html" lang="zh-CN" hreflang="zh-CN" title="简体中文" aria-current="page">中文</a></nav>
+  <div class="wrap">
+    <div class="kicker">新手指南</div>
+    <h1><span class="accent">和</span> AI 智能体一起写软件，<br>一次走清楚一步</h1>
+    <p class="lead">六个 skill 带你从一个模糊的想法，走到能运行、有测试、经过审查的代码。每一步都由你掌控。</p>
+  </div>
+</header>
+
+<!-- ================= STICKY MAP ================= -->
+<nav class="map" aria-label="工作流步骤">
+  <ol>
+    <li class="side"><a href="#basics"><span class="ico">📘</span><span class="lbl">基础</span></a></li>
+    <li><a href="#grill"><span class="ico">🔥</span><span class="lbl">1. Grill me</span></a></li>
+    <li><a href="#spec"><span class="ico">📄</span><span class="lbl">2. Spec</span></a></li>
+    <li><a href="#tickets"><span class="ico">🎟️</span><span class="lbl">3. 工单</span></a></li>
+    <li><a href="#implement"><span class="ico">🛠️</span><span class="lbl">4. 编码 + TDD</span></a></li>
+    <li><a href="#review"><span class="ico">🔍</span><span class="lbl">5. 审查</span></a></li>
+    <li><a href="#retro"><span class="ico">🪞</span><span class="lbl">6. 复盘</span></a></li>
+    <li class="side"><a href="#cheatsheet"><span class="ico">📋</span><span class="lbl">速查表</span></a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ================= BASICS ================= -->
+<section id="basics">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📘</div>
+      <div>
+        <div class="step-num">开始之前</div>
+        <h2>基础知识</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:28px">
+      <div class="card">
+        <span class="big">🤖</span>
+        <h3>什么是编程智能体？</h3>
+        <p>一个<strong>在你的项目文件夹里工作</strong>的 AI 助手。它能读你的文件、写代码、运行命令，就像一位坐在你电脑前的同事。例如：Claude Code、Codex、Cursor。</p>
+      </div>
+      <div class="card">
+        <span class="big">🧩</span>
+        <h3>什么是 skill？</h3>
+        <p>一张智能体为完成某项任务而遵循的<strong>菜谱卡</strong>。输入斜杠加上名字就能启动一个 skill，例如 <code>/grill-with-docs</code>。</p>
+      </div>
+    </div>
+
+    <div class="setup">
+      <h3>⚙️ 安装配置：每个项目一次，大约 5 分钟</h3>
+      <p style="color:var(--muted)">把一个普通项目变成智能体能顺利工作的项目。新项目<em>和</em>已有项目都适用。</p>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-n">1</div>
+          <div>
+            <h4>安装 skills <small>（每台电脑一次）</small></h4>
+            <p>直接对你的编程智能体说：</p>
+            <div class="term ask">安装 Matt Pocock 的 skills（mattpocock-skills，来自 Claude 官方插件市场）。</div>
+            <p class="small">适用于大多数编程智能体。来源：github.com/mattpocock/skills</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-n">2</div>
+          <div>
+            <h4>给智能体一份项目指南：<code>/init</code></h4>
+            <p>大多数编程智能体都有 init 命令。智能体会扫描你的项目，写一份指南文件（<code>CLAUDE.md</code> 或 <code>AGENTS.md</code>，取决于智能体）：如何运行、测试、构建，以及各部分在哪里。智能体每次会话开始时都会读它。</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-n">3</div>
+          <div>
+            <h4>接入 skills：<code>/setup-matt-pocock-skills</code></h4>
+            <p>它会问 2–3 个问题，然后在你的指南里加一个 "Agent skills" 小节，并在 <code>docs/agents/</code> 中写入几个小配置文件。</p>
+            <p class="small">当它问工单放在哪里时，选<strong>本地文件</strong>。不需要 GitHub 账号。</p>
+          </div>
+        </div>
+      </div>
+      <p class="setup-done">✅ 完成。你的项目已经可以开始下面的 6 个步骤了。</p>
+    </div>
+
+    <div class="card">
+      <h3>💡 为什么要遵循一个工作流？</h3>
+      <p>AI 编程出问题的头号原因：<strong>智能体做出了东西，但不是你想要的。</strong>解决办法是一开始放慢速度：先就想法达成一致，写下来，切成小块，然后才写代码。</p>
+      <p style="margin:0">想想盖房子：🗣️ 和建筑师沟通 → 📐 蓝图 → 📋 施工单 → 🧱 施工，过程中不断检查 → 🔍 竣工验收 → 🪞 团队复盘。</p>
+      <div class="flow-strip">
+        <span class="pill">🔥 Grill with docs</span><span class="arr">→</span>
+        <span class="pill">📄 Spec</span><span class="arr">→</span>
+        <span class="pill">🎟️ 工单</span><span class="arr">→</span>
+        <span class="pill">🛠️ 编码 + TDD</span><span class="arr">→</span>
+        <span class="pill">🔍 审查</span><span class="arr">→</span>
+        <span class="pill">🪞 复盘</span>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;color:var(--muted)">📌 <strong>贯穿全文的例子：</strong>给一个简单的待办事项应用加上<strong>深色模式</strong>。</p>
+  </div>
+</section>
+
+<!-- ================= 1. GRILL ME ================= -->
+<section id="grill">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🔥</div>
+      <div>
+        <div class="step-num">第 1 步</div>
+        <h2>Grill me (with docs)</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/grill-with-docs</span>
+    <p class="oneliner">智能体会<strong>不断向你提问</strong>，直到你们对要做的东西完全达成一致，同时把项目的术语和重大决策<strong>记录下来</strong>。</p>
+    <p class="analogy">🏠 就像一位好建筑师，在动笔画图<em>之前</em>先问："要几间卧室？厨房大还是小？"</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">你</span>
+        <ul><li>用一句话描述你的想法</li><li>回答每个问题（简短回答就行）</li><li>不知道就说"不知道"，智能体会给出建议答案。</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">智能体</span>
+        <ul><li>分小轮提问</li><li>每个问题都给出推荐答案</li><li>一直问到没有不清楚的地方</li><li>更新术语表（<code>GLOSSARY.md</code>）和决策记录（<code>docs/adr/</code>）</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">示例</div>
+    <div class="chat">
+      <div class="chat-bar"><i></i><i></i><i></i><span>编程智能体：todo-app</span></div>
+      <div class="msg you"><div class="who">你</div><div class="text">/grill-with-docs 我想给我的待办应用加深色模式</div></div>
+      <div class="msg claude"><div class="who">智能体</div><div class="text">
+        <p><strong>问 1：</strong>它应该跟随电脑的浅色/深色设置，还是用一个切换按钮？<em>→ 我建议两者都要：默认跟随电脑，再加一个按钮手动切换。</em></p>
+        <p><strong>问 2：</strong>刷新页面后，应用要记住你的选择吗？<em>→ 要。</em></p>
+      </div></div>
+      <div class="msg you"><div class="who">你</div><div class="text">两个都要。对，要记住。</div></div>
+      <div class="msg claude"><div class="who">智能体</div><div class="text"><p>下一轮。<strong>问 3：</strong>按钮放在哪里？…</p></div></div>
+    </div>
+
+    <div class="example-label">它顺手写下的内容</div>
+    <div class="file"><span class="path">GLOSSARY.md</span><b>主题</b>：应用使用的配色，"浅色"或"深色"。
+<b>系统主题</b>：用户电脑的浅色/深色设置。</div>
+    <p style="color:var(--muted);font-size:.95rem">为什么重要：下次你和智能体会用<strong>同样的词</strong>指同样的东西。误解更少，回答更短。（普通的 <code>/grill-me</code> 只做访谈，不写文档，适合与代码无关的话题。）</p>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>提示：</strong>这是大家最常跳过、却最重要的一步。十分钟的提问，能省下好几个小时修错东西的时间。<em>每次</em>都用它。</p></div>
+  </div>
+</section>
+
+<!-- ================= 2. SPEC ================= -->
+<section id="spec">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📄</div>
+      <div>
+        <div class="step-num">第 2 步</div>
+        <h2>写 spec（需求规格）</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/to-spec</span>
+    <p class="oneliner">智能体把你们的对话变成一份<strong>书面计划</strong>（即 "spec"）。不再提新问题，只是把你们达成的共识写下来。</p>
+    <p class="analogy">🏠 这就是蓝图。以后任何人都能翻出来核对："这是我们当时说的吗？"</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">你</span>
+        <ul><li>在访谈结束后、同一个对话里立刻运行</li><li>确认智能体打算怎么测试这个功能</li><li>读一遍 spec，改掉不对的地方</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">智能体</span>
+        <ul><li>浏览你的代码</li><li>把 spec 写进文件</li><li>同时列出<em>不在范围内</em>的内容</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">示例：智能体写出的内容</div>
+    <div class="file"><span class="path">.scratch/dark-mode/spec.md</span><b>## 问题</b>
+应用在晚上太亮了。
+
+<b>## 方案</b>
+一个跟随电脑设置的深色主题，外加一个切换按钮。
+
+<b>## 用户故事</b>
+1. 作为用户，当我的电脑处于深色模式时，我希望应用也是深色的…
+2. 作为用户，我希望有一个按钮来切换主题…
+3. 作为用户，我希望刷新后我的选择仍被记住…
+
+<b>## 不在范围内</b>
+<span class="dim">自定义颜色、日落时自动切换深色模式。</span></div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>提示：</strong>spec 是<strong>你的</strong>文档。哪里不对，现在就说。改一句话比改代码便宜得多。</p></div>
+  </div>
+</section>
+
+<!-- ================= 3. TICKETS ================= -->
+<section id="tickets">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🎟️</div>
+      <div>
+        <div class="step-num">第 3 步</div>
+        <h2>切分成工单</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/to-tickets</span>
+    <p class="oneliner">智能体把 spec 拆成<strong>小工单</strong>（ticket）。每一个都是能独立运行的小块。</p>
+    <p class="analogy">🏠 施工单："厨房水管"、"卧室电路"。一个班组，一项任务，一天完成。</p>
+
+    <div class="slices">
+      <div class="card">
+        <h3>✅ 好：竖切</h3>
+        <div class="cake slicesv"><div>01</div><div>02</div><div>03</div></div>
+        <p style="margin:0">每个工单为一个小功能贯穿<strong>所有层</strong>（界面、逻辑、存储）。一完成就能试用。</p>
+      </div>
+      <div class="card">
+        <h3>❌ 差：横切</h3>
+        <div class="cake layers"><div>所有界面</div><div>所有逻辑</div><div>所有存储</div></div>
+        <p style="margin:0">"先做完所有界面，再做所有逻辑……" 直到最后一刻都没有能跑的东西。</p>
+      </div>
+    </div>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">你</span>
+        <ul><li>检查建议的列表</li><li>太大？太小？让它拆分或合并。</li><li>批准</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">智能体</span>
+        <ul><li>按顺序提出工单</li><li>标明哪个工单要等哪个</li><li>每个工单存成一个文件</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">示例：深色模式的工单</div>
+    <div class="tickets">
+      <div class="ticket"><div class="n">01</div><strong>按钮切换主题</strong><div class="blk">等待：无，马上开始</div></div>
+      <div class="ticket"><div class="n">02</div><strong>刷新后记住选择</strong><div class="blk">等待：01</div></div>
+      <div class="ticket"><div class="n">03</div><strong>默认跟随电脑设置</strong><div class="blk">等待：01</div></div>
+    </div>
+    <p style="color:var(--muted);font-size:.9rem">保存为 <code>.scratch/dark-mode/issues/01-toggle-button.md</code>、<code>02-…</code>、<code>03-…</code></p>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>提示：</strong>每个工单的大小都能放进<strong>一次全新的智能体会话</strong>。工单小，智能体就更专注，出错更少。</p></div>
+  </div>
+</section>
+
+<!-- ================= 4. IMPLEMENT + TDD ================= -->
+<section id="implement">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🛠️</div>
+      <div>
+        <div class="step-num">第 4 步</div>
+        <h2>动手实现，测试先行（TDD）</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/implement</span>
+    <p class="oneliner">智能体一次实现<strong>一个工单</strong>：<strong>先写测试</strong>，再写让测试通过的代码。</p>
+    <p class="analogy">🏠 砌墙之前，先写下检查标准："墙必须是直的"。砌墙。检查。下一面墙。</p>
+
+    <h3>TDD 循环（测试驱动开发）</h3>
+    <div class="tdd">
+      <div class="box red"><b>🔴 红</b><small>为一个小行为写测试。<br>它会失败，因为代码还不存在。</small></div>
+      <div class="arrow">→</div>
+      <div class="box green"><b>🟢 绿</b><small>只写刚好够用的代码，<br>让测试通过。</small></div>
+      <div class="arrow">↻</div>
+      <div class="box" style="background:var(--card);border:2px dashed var(--line)"><b>重复</b><small>下一个小行为，<br>直到工单完成。</small></div>
+    </div>
+    <p>为什么？测试给了智能体代码能用的<strong>证据</strong>，而不是凭感觉相信。没有测试，它就是在盲飞。</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">你</span>
+        <ul><li>开启一个<strong>全新会话</strong>（<code>/clear</code> 或新对话）</li><li>给智能体指定一个工单</li><li>商定要测试什么</li><li>看着它做，偏离方向时及时介入</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">智能体</span>
+        <ul><li>执行红 → 绿循环</li><li>最后运行全部测试</li><li>自己启动审查（第 5 步）</li><li>保存工作（git commit）</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">示例</div>
+    <div class="chat">
+      <div class="chat-bar"><i></i><i></i><i></i><span>编程智能体：todo-app（全新会话）</span></div>
+      <div class="msg you"><div class="who">你</div><div class="text">/clear<br>/implement .scratch/dark-mode/issues/01-toggle-button.md</div></div>
+      <div class="msg claude"><div class="who">智能体</div><div class="text">
+        <p>🔴 测试："点击主题按钮会让页面变深色"。如预期失败。</p>
+        <p>🟢 加上了按钮和深色配色。测试通过。</p>
+        <p>🔴 测试："点击两次会回到浅色"… 🟢 通过。</p>
+        <p>✅ 全部测试通过。已提交。正在启动审查…</p>
+      </div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px">
+      <h3>⚡ 更快的选项：用 <code>/implement-spec</code> 一次完成所有工单</h3>
+      <p>不再是一个会话一个工单，而是由智能体<strong>同时启动多个助手智能体</strong>。每个助手在自己的项目副本里工作，各负责一个工单，同样测试先行。一个工单完成后，它的工作会合并到一个共同的分支。等待中的工单在其依赖完成后立即开始。最后对全部内容做一次审查。</p>
+      <p style="margin:0;color:var(--muted);font-size:.95rem">工单很多时最合适。建议先用 <code>/implement</code> 一次做一个工单，等熟悉流程后再用。这样更容易跟上，也更容易掌控。</p>
+    </div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>提示：</strong>想在这个流程之外的小修复里也先写测试？直接输入 <code>/tdd</code>，是同一个循环。</p></div>
+  </div>
+</section>
+
+<!-- ================= 5. REVIEW ================= -->
+<section id="review">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🔍</div>
+      <div>
+        <div class="step-num">第 5 步</div>
+        <h2>代码审查</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/code-review</span>
+    <p class="oneliner">两位独立的审查者检查这份工作。<strong>代码干净吗？</strong>以及<strong>它做到了工单的要求吗？</strong></p>
+    <p class="analogy">🏠 竣工验收。一位检查员核对建筑规范，另一位核对是否和蓝图一致。</p>
+
+    <div class="axes">
+      <div class="card">
+        <h3>📏 Standards（规范）</h3>
+        <p style="margin:0">代码遵守项目的规则吗？命名清楚吗？没有复制粘贴的代码吗？没有过度复杂的地方吗？</p>
+      </div>
+      <div class="card">
+        <h3>🎯 Spec（需求）</h3>
+        <p style="margin:0">它做到了工单要求的<strong>全部</strong>，并且<strong>没有多做</strong>吗？有缺失、错误或多余的吗？</p>
+      </div>
+    </div>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">你</span>
+        <ul><li>阅读两份报告</li><li>决定修什么："修 1 和 3，忽略 2"</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">智能体</span>
+        <ul><li>并行运行两位审查者</li><li>报告发现的问题，不擅自修改</li><li>修复你选中的问题</li></ul>
+      </div>
+    </div>
+
+    <div class="example-label">示例：审查报告</div>
+    <div class="file"><b>## Standards</b>  （1 项）
+- 命名可能不清楚：变量 `t` 应该叫 `theme`。
+
+<b>## Spec</b>  （1 项）
+- 多余：加了一个工单没有要求的"复古棕"主题。</div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>提示：</strong><code>/implement</code> 结束时会自动帮你运行审查。想自己运行时，给它一个起点，例如 <code>/code-review main</code>（main 分支之后的所有改动）。</p></div>
+
+    <div class="loopback">
+      <div class="big">🔁</div>
+      <h3>下一个工单？回到第 4 步。</h3>
+      <p style="margin:0">全新会话 → <code>/implement</code> 工单 02 → 审查 → 工单 03… 直到所有工单完成。然后进入第 6 步。🎉</p>
+      <p style="margin:10px 0 0;color:var(--muted)">⚡ 工单很多？<code>/implement-spec</code> 能一次并行跑完整个循环，最后统一审查（见第 4 步）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. RETRO ================= -->
+<section id="retro">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">🪞</div>
+      <div>
+        <div class="step-num">第 6 步</div>
+        <h2>复盘：从这次会话中学习</h2>
+      </div>
+    </div>
+    <span class="cmd-chip cmd">/retro</span>
+    <p class="oneliner">智能体回顾这次工作的过程，提出<strong>改进自身工作环境</strong>的建议，让下一个功能做得更顺。它改的是环境，不是代码。</p>
+    <p class="analogy">🏠 房子盖好后的团队复盘会："什么拖慢了我们？下次应该自动检查什么？"</p>
+
+    <div class="roles">
+      <div class="role you"><span class="badge you">你</span>
+        <ul><li>在所有工单完成后，或一次不顺利的会话后运行</li><li>选择要采纳哪些建议</li></ul>
+      </div>
+      <div class="role claude"><span class="badge claude">智能体</span>
+        <ul><li>重读这次会话</li><li>找出慢的或出错的地方</li><li>按重要程度提出改进建议</li></ul>
+      </div>
+    </div>
+
+    <h3>它会关注什么</h3>
+    <div class="grid grid-3" style="margin-bottom:24px">
+      <div class="card"><span class="big">🧭</span><h3>找东西</h3><p style="margin:0">智能体花时间到处找文件了吗？在项目指南里加一条指引。</p></div>
+      <div class="card"><span class="big">🚦</span><h3>自动检查</h3><p style="margin:0">linter、测试或提交前检查能不能提前发现某个错误？加上它。</p></div>
+      <div class="card"><span class="big">📏</span><h3>规则</h3><p style="margin:0">审查漏掉了什么吗？在代码规范里加一条规则，或删掉没用的规则。</p></div>
+    </div>
+
+    <div class="example-label">示例</div>
+    <div class="chat">
+      <div class="chat-bar"><i></i><i></i><i></i><span>编程智能体：todo-app</span></div>
+      <div class="msg you"><div class="who">你</div><div class="text">/retro</div></div>
+      <div class="msg claude"><div class="who">智能体</div><div class="text">
+        <p><strong>1. 自动检查：</strong>我有一次在测试失败的情况下提交了。建议加一个提交前自动运行测试的检查。</p>
+        <p><strong>2. 找东西：</strong>我翻了 6 个文件才找到颜色设置。建议在 <code>AGENTS.md</code> 里加一行："主题颜色在 <code>styles/theme.css</code>"。</p>
+      </div></div>
+      <div class="msg you"><div class="who">你</div><div class="text">两个都做。</div></div>
+    </div>
+
+    <div class="tip"><span class="t-ico">💡</span><p><strong>提示：</strong>每次复盘都会让智能体在<strong>你的项目上</strong>变得更好一点。小改进积累起来很快。</p></div>
+  </div>
+</section>
+
+<!-- ================= CHEAT SHEET ================= -->
+<section id="cheatsheet">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="bubble">📋</div>
+      <div>
+        <div class="step-num">收藏备用</div>
+        <h2>速查表</h2>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>步骤</th><th>输入</th><th>会发生什么</th><th>你的任务</th></tr></thead>
+      <tbody>
+        <tr><td class="c">0 · 配置 <small>（一次）</small></td><td class="c"><span class="cmd">/init</span> 然后 <span class="cmd">/setup-matt-pocock-skills</span></td><td>写出项目指南（<code>CLAUDE.md</code> 或 <code>AGENTS.md</code>），再接入 skills。选择"本地文件"。</td><td>回答 3 个问题</td></tr>
+        <tr><td class="c">1 · 🔥 Grill me</td><td class="c"><span class="cmd">/grill-with-docs</span> + 想法</td><td>智能体不断提问直到想法清晰，并更新术语表</td><td>回答问题</td></tr>
+        <tr><td class="c">2 · 📄 Spec</td><td class="c"><span class="cmd">/to-spec</span></td><td>把计划写进 <code>spec.md</code></td><td>阅读、修改</td></tr>
+        <tr><td class="c">3 · 🎟️ 工单</td><td class="c"><span class="cmd">/to-tickets</span></td><td>把 spec 切成能独立运行的小块</td><td>批准列表</td></tr>
+        <tr><td class="c">4 · 🛠️ 编码 + TDD</td><td class="c"><span class="cmd">/clear</span> 然后 <span class="cmd">/implement</span> 工单</td><td>先测试 🔴，再写代码 🟢，循环。提交。</td><td>观察、把控方向</td></tr>
+        <tr><td class="c">5 · 🔍 审查</td><td class="c"><span class="cmd">/code-review</span> <small>（自动）</small></td><td>两项检查：代码干净 + 符合工单</td><td>选择要修什么</td></tr>
+        <tr><td class="c">🔁</td><td colspan="3">每个工单重复第 4–5 步。或运行 <span class="cmd">/implement-spec</span> 并行完成全部工单。</td></tr>
+        <tr><td class="c">6 · 🪞 复盘</td><td class="c"><span class="cmd">/retro</span></td><td>为智能体的工作环境提出改进，让下次更顺</td><td>选择要采纳什么</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px;color:var(--muted);font-size:.9rem">黄金法则：<strong>先沟通，最后才写代码。</strong>小步前进，每个工单一个全新会话，用测试作证据，每个功能完成后复盘。</p>
+    <button class="print-btn" onclick="window.print()">🖨️ 打印速查表</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  基于 <a href="https://github.com/mattpocock/skills" style="color:var(--accent)">Matt Pocock 的 skills</a>，适用于编程智能体。
+  内容对应 1.3.1 版本（2026 年 10 月）。
+  在命令菜单中，skill 可能带有前缀显示，例如 <code>/mattpocock-skills:grill-with-docs</code>。
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
