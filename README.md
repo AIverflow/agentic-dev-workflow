@@ -49,13 +49,13 @@ Translation fixes are welcome: open an issue or a pull request.
 
 ## Run it locally
 
-No build step, no dependencies. Open `index.html` in a browser, or:
+No build step, no dependencies. Open `docs/index.html` in a browser, or:
 
-    python3 -m http.server 8000
+    python3 -m http.server 8000 -d docs
 
 ## Also in this repo
 
-`parallel-tickets-prompt.md`: a reusable prompt that builds a set of tickets in
+`prompt/parallel-tickets.md`: a reusable prompt that builds a set of tickets in
 parallel with the full cycle for each one (build with TDD → separate review → fix →
 merge → next ticket), and asks you whenever a ticket hits a blocking question.
 It works with any coding agent and any tracker. The official `/implement-spec` skill does
